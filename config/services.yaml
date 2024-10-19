@@ -26,9 +26,7 @@ services:
             $baseUrl: '%env(BASE_URL)%'
             $projectId: '%env(PROJECT_ID)%'
 
-
-    App\Service\MarkdownService:
-        public: true
+    Symfony\Component\Security\Http\Authenticator\FormLoginAuthenticator: '@security.authenticator.form_login.main'
 
 
     # add more service definitions when explicit configuration is needed
