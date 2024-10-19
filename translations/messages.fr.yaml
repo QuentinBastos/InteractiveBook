@@ -1,0 +1,6 @@
+button:
+  submit: Envoyer
+  cancel: Annuler
+
+form:
+  message: Envoyer un message

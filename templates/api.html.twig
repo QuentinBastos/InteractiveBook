@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    {# add form #}
+    {{ form_start(form) }}
+    {{ form_row(form.message) }}
+    {{ form_row(form.submit) }}
+    {{ form_end(form) }}
+    {% if response is defined and response is not null %}
+        <h2>API Response:</h2>
+        <p>Model: {{ response.model }}</p>
+        <p>Content: {{ response.choices[0].message.content }}</p>
+        <p>Prompt Tokens: {{ response.usage.prompt_tokens }}</p>
+        <p>Completion Tokens: {{ response.usage.completion_tokens }}</p>
+        <p>Total Tokens: {{ response.usage.total_tokens }}</p>
+    {% else %}
+        <p>No response received.</p>
+    {% endif %}
+{% endblock %}
