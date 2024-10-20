@@ -20,6 +20,6 @@ class CustomAuthenticationSuccessHandlerInterface implements AuthenticationSucce
     public function onAuthenticationSuccess(Request $request, TokenInterface $token): RedirectResponse
     {
         // Redirect to a chosen page, e.g., the homepage
-        return new RedirectResponse($this->router->generate('app_tracks'));
+        return new RedirectResponse($this->router->generate('app_home'));
     }
 }
