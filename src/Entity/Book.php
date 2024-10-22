@@ -11,37 +11,36 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[ORM\Entity(repositoryClass: BookRepository::class)]
 class Book
 {
-    const string TYPE_SCIENCE_FICTION = 'Science Fiction';
-    const string TYPE_FANTASY = 'Fantasy';
-    const string TYPE_MYSTERY = 'Mystery';
-    const string TYPE_HORROR = 'Horror';
-    const string TYPE_ROMANCE = 'Romance';
-    const string TYPE_THRILLER = 'Thriller';
-    const string TYPE_ADVENTURE = 'Adventure';
-    const string TYPE_HISTORICAL = 'Historical';
-    const string TYPE_DYSTOPIA = 'Dystopia';
-    const string TYPE_BIOGRAPHY = 'Biography';
-    const string TYPE_AUTOBIOGRAPHY = 'Autobiography';
-    const string TYPE_ESSAY = 'Essay';
-    const string TYPE_DRAMA = 'Drama';
-    const string TYPE_POETRY = 'Poetry';
-    const string TYPE_PHILOSOPHICAL = 'Philosophical';
-    const string TYPE_GOTHIC = 'Gothic';
-    const string TYPE_SHORT_STORY = 'Short Story';
-    const string TYPE_EPISTOLARY = 'Epistolary';
-    const string TYPE_SURREALISM = 'Surrealism';
-    const string TYPE_UTOPIA = 'Utopia';
-    const string TYPE_FANTASTIC = 'Fantastic';
-    const string TYPE_MEMOIR = 'Memoir';
-    const string TYPE_COMING_OF_AGE = 'Coming of Age';
-    const string TYPE_POST_APOCALYPTIC = 'Post Apocalyptic';
-    const string TYPE_SATIRE = 'Satire';
+    const string TYPE_SCIENCE_FICTION = 'science_fiction';
+    const string TYPE_FANTASY = 'fantasy';
+    const string TYPE_MYSTERY = 'mystery';
+    const string TYPE_HORROR = 'horror';
+    const string TYPE_ROMANCE = 'romance';
+    const string TYPE_THRILLER = 'thriller';
+    const string TYPE_ADVENTURE = 'adventure';
+    const string TYPE_HISTORICAL = 'historical';
+    const string TYPE_DYSTOPIA = 'dystopia';
+    const string TYPE_BIOGRAPHY = 'biography';
+    const string TYPE_AUTOBIOGRAPHY = 'autobiography';
+    const string TYPE_ESSAY = 'essay';
+    const string TYPE_DRAMA = 'drama';
+    const string TYPE_POETRY = 'poetry';
+    const string TYPE_PHILOSOPHICAL = 'philosophical';
+    const string TYPE_GOTHIC = 'gothic';
+    const string TYPE_SHORT_STORY = 'short_story';
+    const string TYPE_EPISTOLARY = 'epistolary';
+    const string TYPE_SURREALISM = 'surrealism';
+    const string TYPE_UTOPIA = 'utopia';
+    const string TYPE_FANTASTIC = 'fantastic';
+    const string TYPE_MEMOIR = 'memoir';
+    const string TYPE_COMING_OF_AGE = 'coming_of_age';
+    const string TYPE_POST_APOCALYPTIC = 'post_apocalyptic';
+    const string TYPE_SATIRE = 'satire';
 
-    private TranslatorInterface $translator;
-
-    public function __construct(TranslatorInterface $translator)
+    public function __construct(
+        private readonly TranslatorInterface $translator
+    )
     {
-        $this->translator = $translator;
         $this->pages = new ArrayCollection();
     }
 
@@ -50,8 +49,8 @@ class Book
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: 'integer', length: 255, nullable: true)]
-    private ?int $type = null;
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $type = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $title = null;
@@ -73,12 +72,12 @@ class Book
         $this->id = $id;
     }
 
-    public function getType(): ?int
+    public function getType(): ?string
     {
         return $this->type;
     }
 
-    public function setType(?int $type): void
+    public function setType(?string $type): void
     {
         $this->type = $type;
     }
@@ -148,17 +147,5 @@ class Book
         }
 
         return $types;
-    }
-
-    public function getTranslatedTypes(): array
-    {
-        $types = self::getTypes();
-        $translatedTypes = [];
-
-        foreach ($types as $type) {
-            $translatedTypes[$type] = $this->translator->trans('book.type.' . strtolower(str_replace(' ', '_', $type)));
-        }
-
-        return $translatedTypes;
     }
 }

@@ -5,6 +5,7 @@ button:
 
 form:
   message: Envoyer un message
+  type: Type de message
 
 book:
   type:
