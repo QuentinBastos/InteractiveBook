@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\PageRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PageRepository::class)]
@@ -13,34 +15,85 @@ class Page
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: Page::class, inversedBy: 'page')]
-    #[ORM\JoinColumn]
-    private ?Book $book;
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
+    #[ORM\JoinColumn(onDelete: 'CASCADE')]
+    private ?self $parent = null;
+
+    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parent')]
+    private Collection $children;
 
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $content = null;
 
+    #[ORM\Column(type: 'boolean', options: ['default' => false])]
+    private bool $lastPage = false;
+
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $filePath = null;
+
+    public function __construct()
+    {
+        $this->children = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function setId(?int $id): void
+    public function getParent(): ?self
     {
-        $this->id = $id;
+        return $this->parent;
     }
 
-    public function getBook(): ?Book
+    public function setParent(?self $parent): void
     {
-        return $this->book;
+        $this->parent = $parent;
     }
 
-    public function setBook(?Book $book): void
+    /**
+     * @return Collection<int, self>
+     */
+    public function getChildren(): Collection
     {
-        $this->book = $book;
+        return $this->children;
+    }
+
+    public function addChild(self $child): void
+    {
+        if (!$this->children->contains($child)) {
+            $this->children->add($child);
+            $child->setParent($this);
+        }
+    }
+
+    public function removeChild(self $child): void
+    {
+        if ($this->children->removeElement($child)) {
+            if ($child->getParent() === $this) {
+                $child->setParent(null);
+            }
+        }
+    }
+
+    public function getContent(): ?string
+    {
+        return $this->content;
+    }
+
+    public function setContent(?string $content): void
+    {
+        $this->content = $content;
+    }
+
+    public function getLastPage(): bool
+    {
+        return $this->lastPage;
+    }
+
+    public function setLastPage(bool $lastPage): void
+    {
+        $this->lastPage = $lastPage;
     }
 
     public function getFilePath(): ?string
