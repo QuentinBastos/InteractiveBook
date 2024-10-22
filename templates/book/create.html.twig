@@ -1,0 +1,8 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="col-12">
+        {{ form_start(form, {'attr': {'class': 'd-flex align-items-end gap-3 w-100'}}) }}
+        {{ form_row(form.type) }}
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

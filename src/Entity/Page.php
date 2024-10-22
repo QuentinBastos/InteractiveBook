@@ -22,6 +22,10 @@ class Page
     #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parent')]
     private Collection $children;
 
+    #[ORM\ManyToOne(targetEntity: Book::class, inversedBy: 'pages')]
+    #[ORM\JoinColumn]
+    private ?Book $book = null;
+
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $content = null;
 
@@ -135,5 +139,15 @@ class Page
     public function setFilePath(?string $filePath): void
     {
         $this->filePath = $filePath;
+    }
+
+    public function getBook(): ?Book
+    {
+        return $this->book;
+    }
+
+    public function setBook(?Book $book): void
+    {
+        $this->book = $book;
     }
 }

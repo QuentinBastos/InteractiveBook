@@ -5,3 +5,31 @@ button:
 
 form:
   message: Envoyer un message
+
+book:
+  type:
+    science_fiction: Science-fiction
+    fantasy: Fantaisie
+    mystery: Mystère
+    horror: Horreur
+    romance: Romance
+    thriller: Thriller
+    adventure: Aventure
+    historical: Historique
+    dystopia: Dystopie
+    biography: Biographie
+    autobiography: Autobiographie
+    essay: Essai
+    drama: Drame
+    poetry: Poésie
+    philosophical: Philosophique
+    gothic: Gothique
+    short_story: Nouvelle
+    epistolary: Épistolaire
+    surrealism: Surréalisme
+    utopia: Utopie
+    fantastic: Fantastique
+    memoir: Mémoire
+    coming_of_age: Roman d'apprentissage
+    post_apocalyptic: Post-apocalyptique
+    satire: Satire
