@@ -1,0 +1,10 @@
+{# templates/page/upload.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Upload File</h1>
+    {{ form_start(form) }}
+    {{ form_row(form.file) }}
+    <button class="btn">Upload</button>
+    {{ form_end(form) }}
+{% endblock %}
