@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Book;
+use App\Entity\User;
 use App\Form\BookCreateType;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -30,14 +31,22 @@ class BookController extends AbstractController
         $form = $this->createForm(BookCreateType::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $book = new Book($this->translator);
-            $book->setType($form->get('type')->getData());
-            $book->setTitle($form->get('title')->getData());
-            $this->em->persist($book);
-            $this->em->flush();
+            $user = $this->getUser();
+            if ($user instanceof User) {
+                $book = new Book($this->translator);
+                $book->setType($form->get('type')->getData());
+                $book->setTitle($form->get('title')->getData());
+                $book->setUser($this->getUser());
+                $this->em->persist($book);
+                $this->em->flush();
+                return $this->redirectToRoute('page_create');
+            } else {
+                $error = $this->translator->trans('form.error.user_not_logged');
+            }
         }
         return $this->render('book/create.html.twig', [
             'form' => $form->createView(),
+            'error' => $error ?? false,
         ]);
     }
 }

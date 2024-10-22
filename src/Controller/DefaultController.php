@@ -45,8 +45,6 @@ class DefaultController extends AbstractController
         $form = $this->createForm(ApiType::class);
         $form->handleRequest($request);
 
-        // Initialize variables
-        $message = '';
         $conversation = $session->get('conversation', []);
 
         if ($form->isSubmitted() && $form->isValid()) {

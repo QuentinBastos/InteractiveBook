@@ -6,6 +6,8 @@ button:
 form:
   message: Envoyer un message
   type: Type de message
+  error:
+    user_not_logged: Veuillez vous connecter
 
 book:
   type:

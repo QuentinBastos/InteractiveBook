@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Book;
 use App\Entity\Page;
 use App\Form\FileUploadType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -13,7 +14,15 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/page')]
 class PageController extends AbstractController
 {
-    #[Route('/upload', name: 'app_page_upload')]
+
+
+    public function __construct(
+        private readonly EntityManagerInterface $em,
+    )
+    {
+    }
+
+    #[Route('/upload', name: 'page_upload')]
     public function upload(Request $request, EntityManagerInterface $entityManager): Response
     {
         $page = new Page();
@@ -35,6 +44,17 @@ class PageController extends AbstractController
 
         return $this->render('page/upload.html.twig', [
             'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/create', name: 'page_create')]
+    public function create(int $pageId): Response
+    {
+        $page = $this->em->getRepository(Page::class)->find($pageId);
+        $book = $page->getBook();
+        return $this->render('page/create.html.twig', [
+            'page' => $page,
+            'book' => $book,
         ]);
     }
 }

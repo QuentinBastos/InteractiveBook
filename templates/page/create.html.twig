@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    Bienvenue sur votre page
+    {% if book is defined and book is not null %}
+        {{ book.id }}
+        {{ book.title }}
+        {{ book.type }}
+    {% endif %}
+{% endblock %}
