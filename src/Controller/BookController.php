@@ -31,7 +31,6 @@ class BookController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $book = new Book($this->translator);
-            $book->debugTypes();
             $book->setType($form->get('type')->getData());
             $book->setTitle($form->get('title')->getData());
             $this->em->persist($book);
