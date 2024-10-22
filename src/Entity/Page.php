@@ -31,9 +31,13 @@ class Page
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $filePath = null;
 
+    #[ORM\OneToMany(targetEntity: Target::class, mappedBy: 'page')]
+    private Collection $targets;
+
     public function __construct()
     {
         $this->children = new ArrayCollection();
+        $this->targets = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -74,6 +78,33 @@ class Page
                 $child->setParent(null);
             }
         }
+    }
+
+    public function addTarget(Target $target): void
+    {
+        if (!$this->targets->contains($target)) {
+            $this->targets->add($target);
+            $target->setPage($this);
+        }
+    }
+
+    public function removeTarget(Target $target): void
+    {
+        if ($this->targets->removeElement($target)) {
+            if ($target->getPage() === $this) {
+                $target->setPage(null);
+            }
+        }
+    }
+
+    public function getTargets(): Collection
+    {
+        return $this->targets;
+    }
+
+    public function setTargets(Collection $targets): void
+    {
+        $this->targets = $targets;
     }
 
     public function getContent(): ?string
