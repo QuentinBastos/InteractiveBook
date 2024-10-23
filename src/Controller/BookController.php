@@ -3,9 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Book;
+use App\Entity\Page;
 use App\Entity\User;
 use App\Form\BookCreateType;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,7 +39,10 @@ class BookController extends AbstractController
                 $book->setUser($this->getUser());
                 $this->em->persist($book);
                 $this->em->flush();
-                return $this->redirectToRoute('page_create');
+                return $this->render('page/create.html.twig', [
+                    'book' => $book,
+                    'page_id' => Page::FIRST_PAGE
+                ]);
             } else {
                 $error = $this->translator->trans('form.error.user_not_logged');
             }

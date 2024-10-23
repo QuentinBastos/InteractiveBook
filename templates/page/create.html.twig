@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
+{% set first_page = constant('App\\Entity\\Page::FIRST_PAGE') %}
 {% block body %}
-    Bienvenue sur votre page
-    {% if book is defined and book is not null %}
-        {{ book.id }}
-        {{ book.title }}
-        {{ book.type }}
+    {% if page_id is defined and page_id == first_page %}
+        {% include 'page/first_page.html.twig' %}
+    {% else %}
+        {% include 'page/other_page.html.twig' %}
     {% endif %}
 {% endblock %}

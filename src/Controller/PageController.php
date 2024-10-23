@@ -47,11 +47,31 @@ class PageController extends AbstractController
         ]);
     }
 
-    #[Route('/create', name: 'page_create')]
-    public function create(int $pageId): Response
+
+    #[Route('/{bookId}/create/{pageId}', name: 'page_create')]
+    public function create(int $bookId, int $pageId, int $parentId, Request $request): Response
     {
+        $book = $this->em->getRepository(Book::class)->find($bookId);
         $page = $this->em->getRepository(Page::class)->find($pageId);
-        $book = $page->getBook();
+
+        if (!$book || !$page) {
+            throw $this->createNotFoundException('The book or page does not exist');
+        }
+
+        if ($bookId !== Page::FIRST_PAGE) {
+            if ($parentId) {
+                $parent = $this->em->getRepository(Page::class)->find($parentId);
+                $page->setParent($parent);
+            }
+            $page = new Page();
+            $page->setBook($book);
+            $page->setNumber($pageId);
+            $page->setContent('test');
+            $page->setFilePath('test2');
+            $this->em->persist($page);
+            $this->em->flush();
+        }
+
         return $this->render('page/create.html.twig', [
             'page' => $page,
             'book' => $book,

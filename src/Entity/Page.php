@@ -10,10 +10,14 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: PageRepository::class)]
 class Page
 {
+    const int FIRST_PAGE = 1;
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
+
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private ?int $number = null;
 
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
     #[ORM\JoinColumn(onDelete: 'CASCADE')]
@@ -149,5 +153,15 @@ class Page
     public function setBook(?Book $book): void
     {
         $this->book = $book;
+    }
+
+    public function getNumber(): ?int
+    {
+        return $this->number;
+    }
+
+    public function setNumber(?int $number): void
+    {
+        $this->number = $number;
     }
 }

@@ -1,0 +1,21 @@
+VOUS ETES SUR UNE NOUVELLES PAGE
+<br>
+{% if book is defined and book is not null %}
+    Book ID: {{ book.id }}
+    <br>
+    Book title: {{ book.title }}
+    <br>
+    Book type: {{ book.type }}
+    <br>
+    Book user: {{ book.user.email }}
+{% endif %}
+{% if page is defined and page is not null %}
+    Page ID: {{ page.id }}
+    <br>
+    Page title: {{ page.title }}
+    <br>
+    {% if page.parent is defined and page.parent is not null %}
+        Page parent title: {{ page.parent.title }}
+        Page parent ID: {{ page.parent.id }}
+    {% endif %}
+{% endif %}
