@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+{% import 'macros/page_macros.html.twig' as page_macros %}
+{% block body %}
+    {% if book is defined and book %}
+        <h1>{{ book.title }}</h1>
+        <ul>
+            {% for page in book.pages %}
+                {{ page_macros.render_page_tree(page) }}
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}

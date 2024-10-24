@@ -39,9 +39,9 @@ class BookController extends AbstractController
                 $book->setUser($this->getUser());
                 $this->em->persist($book);
                 $this->em->flush();
-                return $this->render('page/create.html.twig', [
-                    'book' => $book,
-                    'page_id' => Page::FIRST_PAGE
+                return $this->redirectToRoute('page_create', [
+                    'bookId' => $book->getId(),
+                    'pageId' => Page::FIRST_PAGE
                 ]);
             } else {
                 $error = $this->translator->trans('form.error.user_not_logged');
@@ -51,5 +51,20 @@ class BookController extends AbstractController
             'form' => $form->createView(),
             'error' => $error ?? false,
         ]);
+    }
+
+    #[Route('/update/{id}', name: 'book_update')]
+    public function update(Request $request): Response
+    {
+        $book = $this->em->getRepository(Book::class)->find($request->get('id'));
+        return $this->render('book/update.html.twig', [
+            'book' => $book,
+        ]);
+    }
+
+    #[Route('/show', name: 'book_show')]
+    public function show(Request $request): Response
+    {
+        return $this->render('book/show.html.twig');
     }
 }

@@ -1,9 +1,32 @@
 {% extends 'base.html.twig' %}
-{% set first_page = constant('App\\Entity\\Page::FIRST_PAGE') %}
 {% block body %}
-    {% if page_id is defined and page_id == first_page %}
-        {% include 'page/first_page.html.twig' %}
-    {% else %}
-        {% include 'page/other_page.html.twig' %}
+    {% if first_page is defined and first_page == true %}
+        BIENVENUE SUR LA PREMIERE PAGE DE VOTRE LIVRE
+        <br>
+        <br>
+        <br>
+        <br>
+    {% elseif page.parent is defined and page.parent %}
+        {{ page.parent.title }}
     {% endif %}
+    {% if book is defined and book is not null %}
+        Book ID: {{ book.id }}
+        <br>
+        Book title: {{ book.title }}
+        <br>
+        Book type: {{ book.type }}
+        <br>
+        Book user: {{ book.user.email }}
+        {% if form is defined and form %}
+            {{ form_start(form) }}
+            {{ form_row(form.struct) }}
+            {{ form_row(form.apiMessage) }}
+            {{ form_row(form.fileUpload) }}
+        {% endif %}
+    {% endif %}
+    {% if first_page is defined and first_page == false %}
+        {{ form_row(form.target) }}
+    {% endif %}
+    {{ form_row(form.submit) }}
+    {{ form_end(form) }}
 {% endblock %}

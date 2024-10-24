@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: PageRepository::class)]
 class Page
 {
+    const int NO_PAGE = 0;
     const int FIRST_PAGE = 1;
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -39,13 +40,17 @@ class Page
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $filePath = null;
 
-    #[ORM\OneToMany(targetEntity: Target::class, mappedBy: 'page')]
-    private Collection $targets;
+    #[ORM\OneToMany(targetEntity: Target::class, mappedBy: 'fromPage')]
+    private Collection $fromTargets;
+
+    #[ORM\OneToMany(targetEntity: Target::class, mappedBy: 'toPage')]
+    private Collection $toTargets;
 
     public function __construct()
     {
         $this->children = new ArrayCollection();
-        $this->targets = new ArrayCollection();
+        $this->fromTargets = new ArrayCollection();
+        $this->toTargets = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -88,31 +93,58 @@ class Page
         }
     }
 
-    public function addTarget(Target $target): void
+    public function addFromTarget(Target $target): void
     {
-        if (!$this->targets->contains($target)) {
-            $this->targets->add($target);
-            $target->setPage($this);
+        if (!$this->fromTargets->contains($target)) {
+            $this->fromTargets->add($target);
+            $target->setFromPage($this);
         }
     }
 
-    public function removeTarget(Target $target): void
+    public function removeFromTarget(Target $target): void
     {
-        if ($this->targets->removeElement($target)) {
-            if ($target->getPage() === $this) {
-                $target->setPage(null);
+        if ($this->fromTargets->removeElement($target)) {
+            if ($target->getFromPage() === $this) {
+                $target->setFromPage(null);
             }
         }
     }
 
-    public function getTargets(): Collection
+    public function addToTarget(Target $target): void
     {
-        return $this->targets;
+        if (!$this->toTargets->contains($target)) {
+            $this->toTargets->add($target);
+            $target->setToPage($this);
+        }
     }
 
-    public function setTargets(Collection $targets): void
+    public function removeToTarget(Target $target): void
     {
-        $this->targets = $targets;
+        if ($this->toTargets->removeElement($target)) {
+            if ($target->getToPage() === $this) {
+                $target->setToPage(null);
+            }
+        }
+    }
+
+    public function getFromTargets(): Collection
+    {
+        return $this->fromTargets;
+    }
+
+    public function setFromTargets(Collection $fromTargets): void
+    {
+        $this->fromTargets = $fromTargets;
+    }
+
+    public function getToTargets(): Collection
+    {
+        return $this->toTargets;
+    }
+
+    public function setToTargets(Collection $toTargets): void
+    {
+        $this->toTargets = $toTargets;
     }
 
     public function getContent(): ?string

@@ -15,8 +15,12 @@ class Target
     private ?int $id = null;
 
     #[ORM\JoinColumn(nullable: false)]
-    #[ORM\ManyToOne(targetEntity: Page::class, inversedBy: 'targets')]
-    private ?Page $page = null;
+    #[ORM\ManyToOne(targetEntity: Page::class, inversedBy: 'fromTargets')]
+    private ?Page $fromPage = null;
+
+    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToOne(targetEntity: Page::class, inversedBy: 'toTargets')]
+    private ?Page $toPage = null;
 
     public function getId(): ?int
     {
@@ -28,13 +32,23 @@ class Target
         $this->id = $id;
     }
 
-    public function getPage(): ?Page
+    public function getFromPage(): ?Page
     {
-        return $this->page;
+        return $this->fromPage;
     }
 
-    public function setPage(?Page $page): void
+    public function setFromPage(?Page $fromPage): void
     {
-        $this->page = $page;
+        $this->fromPage = $fromPage;
+    }
+
+    public function getToPage(): ?Page
+    {
+        return $this->toPage;
+    }
+
+    public function setToPage(?Page $toPage): void
+    {
+        $this->toPage = $toPage;
     }
 }

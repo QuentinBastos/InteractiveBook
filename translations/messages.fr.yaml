@@ -2,6 +2,7 @@ button:
   submit: Envoyer
   cancel: Annuler
   upload: Télécharger une image
+  submit_sibling: Créer une page soeur
 
 form:
   message: Envoyer un message

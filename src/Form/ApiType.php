@@ -33,14 +33,7 @@ class ApiType extends AbstractType
                 'attr' => [
                     'class' => 'form-control',
                 ],
-            ])
-            ->add('submit', SubmitType::class, [
-                'label' => $this->translator->trans('button.submit'),
-                'attr' => [
-                    'class' => 'btn btn-primary',
-                ],
-        ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

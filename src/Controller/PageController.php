@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\Book;
 use App\Entity\Page;
 use App\Form\FileUploadType;
+use App\Form\PageCreateType;
+use App\Manager\PageManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,6 +20,7 @@ class PageController extends AbstractController
 
     public function __construct(
         private readonly EntityManagerInterface $em,
+        private readonly PageManager            $pageManager
     )
     {
     }
@@ -48,33 +51,47 @@ class PageController extends AbstractController
     }
 
 
-    #[Route('/{bookId}/create/{pageId}', name: 'page_create')]
-    public function create(int $bookId, int $pageId, int $parentId, Request $request): Response
+    #[Route('/{bookId}/create/{pageId}/{parentId?}', name: 'page_create')]
+    public function create(int $bookId, int $pageId, Request $request, ?int $parentId = null): Response
     {
+        $isFirstPage = ($pageId === 1);
         $book = $this->em->getRepository(Book::class)->find($bookId);
-        $page = $this->em->getRepository(Page::class)->find($pageId);
+        $form = $this->createForm(PageCreateType::class);
+        $form->handleRequest($request);
 
-        if (!$book || !$page) {
-            throw $this->createNotFoundException('The book or page does not exist');
-        }
-
-        if ($bookId !== Page::FIRST_PAGE) {
-            if ($parentId) {
-                $parent = $this->em->getRepository(Page::class)->find($parentId);
-                $page->setParent($parent);
+        if ($form->isSubmitted() && $form->isValid()) {
+            if (!$book) {
+                throw $this->createNotFoundException('The book does not exist');
             }
+
             $page = new Page();
             $page->setBook($book);
-            $page->setNumber($pageId);
-            $page->setContent('test');
-            $page->setFilePath('test2');
+            $page->setNumber($this->pageManager->getLastPageByBook($book) + 1);
+            $page->setContent($form->get('apiMessage')->getData()['message']);
+            $page->setFilePath($form->get('fileUpload')->getData()['file']);
+
+            if ($parentId) {
+                $parent = $this->em->getRepository(Page::class)->find($parentId);
+                if ($parent) {
+                    $page->setParent($parent);
+                }
+            }
+
             $this->em->persist($page);
             $this->em->flush();
+
+            return $this->render('page/added.html.twig', [
+                'page' => $page,
+                'book' => $book,
+            ]);
         }
 
         return $this->render('page/create.html.twig', [
-            'page' => $page,
+            'previous_page' => $page ?? null,
+            'page' => $page ?? null,
+            'first_page' => $isFirstPage,
             'book' => $book,
+            'form' => $form->createView(),
         ]);
     }
 }
