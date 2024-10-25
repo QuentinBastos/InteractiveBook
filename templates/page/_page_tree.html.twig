@@ -6,11 +6,12 @@
        class="btn btn-primary">
         Add Child Page
     </a>
-
-    <a href="{{ path('page_add', {'bookId': book.id, 'pageId': last_id, 'parentId': page.parent ? page.parent.id : null}) }}"
-       class="btn btn-secondary">
-        Add Sibling Page
-    </a>
+    {% if page.parent is defined and page.parent != null %}
+        <a href="{{ path('page_add', {'bookId': book.id, 'pageId': last_id, 'parentId': page.parent ? page.parent.id : null}) }}"
+           class="btn btn-secondary">
+            Add Sibling Page
+        </a>
+    {% endif %}
     <br>
     {% if page.children|length > 0 %}
         <ul>
