@@ -1,4 +1,10 @@
-.castel-home{
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+body {
+  background-color: white;
+}
+.castel-home {
   height: 200vh;
   width: 100%;
   margin-top: 2.5em;

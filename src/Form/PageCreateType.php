@@ -33,7 +33,7 @@ class PageCreateType extends AbstractType
             ])
             ->add('toTargets', CollectionType::class, [
                 'entry_type' => TargetType::class,
-                'entry_options' => ['label' => false],
+                'entry_options' => ['fromPage' => $options['fromPage'], 'label' => false],
                 'allow_add' => true,
                 'allow_delete' => true,
                 'by_reference' => false,
@@ -61,6 +61,7 @@ class PageCreateType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Page::class,
+            'fromPage' => null,
         ]);
     }
 }
