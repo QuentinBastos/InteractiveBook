@@ -1,4 +1,36 @@
 {% extends 'base.html.twig' %}
 {% block body %}
-    <h1>Contenu de la page d'accueil</h1>
+    <twig:header/>
+    <main class="flex flex-col items-center mt-8">
+        <twig:button text="THE GOOD KNIGHT"/>
+        <h1 class="mt-8 text-7xl font-medium w-1/2 text-center">The Story Of The</h1>
+        <h1 class="text-8xl font-medium w-1/2 text-center">Dilmays Kingdom</h1>
+        <div class="castel-home">
+            <p class="relative w-1/4 break-all top-[14%] left-[7%] bg-white shadow-md p-4 rounded">
+                loretftfrtfvfvygfgcvfyloretftfrtfvfvygfgcvfyhyloretftfrtfvfvygfgcvfyhyloretft
+                frtfvfvygfgcvfyhyloretftfrtfvfvygfgcvfyhyloretftfrtfvfvygfgcvfyhyloretftfrtfvfvygfgcvfyhyhy
+            </p>
+            <p class="relative w-1/4 break-all top-[30%] left-[70%] bg-white shadow-md p-4 rounded ">
+                loretftfrtfvfvygfgcvfyloretftfrtfvfvygfgcvfyhyloretftfrtfvfvygfgcvfyhyloretft
+                frtfvfvygfgcvfyhyloretftfrtfvfvygfgcvfyhyloretftfrtfvfvygfgcvfyhyloretftfrtfvfvygfgcvfyhyhy
+            </p>
+            <p class="relative w-1/4 break-all top-[55%] left-[55%] bg-white shadow-md p-4 rounded ">
+                loretftfrtfvfvygfgcvfyloretftfrtfvfvygfgcvfyhyloretftfrtfvfvygfgcvfyhyloretft
+                frtfvfvygfgcvfyhyloretftfrtfvfvygfgcvfyhyloretftfrtfvfvygfgcvfyhyloretftfrtfvfvygfgcvfyhyhy
+            </p>
+            <div class="relative top-[70%] left-[45%] scale-150 w-fit">
+                <twig:button text="START THE STORY"/>
+            </div>
+        </div>
+        <twig:footer/>
+    </main>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ encore_entry_link_tags('app') }}
+    {{ encore_entry_link_tags('home_css') }}
+{% endblock %}
+
+{% block javascripts %}
+
 {% endblock %}
