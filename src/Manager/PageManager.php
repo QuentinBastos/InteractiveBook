@@ -21,4 +21,19 @@ class PageManager
         }
         return $lastPage->getNumber();
     }
+
+    public function getFirstPageByBook(Book $book): ?Page
+    {
+        $pages = $book->getPages();
+        if ($pages->isEmpty()) {
+            return null;
+        }
+        $firstPage = null;
+        foreach ($pages as $page) {
+            if ($firstPage === null || $page->getId() < $firstPage->getId()) {
+                $firstPage = $page;
+            }
+        }
+        return $firstPage;
+    }
 }

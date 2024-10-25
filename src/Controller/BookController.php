@@ -6,6 +6,7 @@ use App\Entity\Book;
 use App\Entity\Page;
 use App\Entity\User;
 use App\Form\BookCreateType;
+use App\Manager\PageManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,12 +22,13 @@ class BookController extends AbstractController
     public function __construct(
         private readonly TranslatorInterface    $translator,
         private readonly EntityManagerInterface $em,
+        private readonly PageManager $pageManager,
     )
     {
     }
 
-    #[Route('/create', name: 'book_create')]
-    public function create(Request $request): Response
+    #[Route('/add', name: 'book_add')]
+    public function add(Request $request): Response
     {
         $form = $this->createForm(BookCreateType::class);
         $form->handleRequest($request);
@@ -39,7 +41,7 @@ class BookController extends AbstractController
                 $book->setUser($this->getUser());
                 $this->em->persist($book);
                 $this->em->flush();
-                return $this->redirectToRoute('page_create', [
+                return $this->redirectToRoute('page_add', [
                     'bookId' => $book->getId(),
                     'pageId' => Page::FIRST_PAGE
                 ]);
@@ -47,7 +49,7 @@ class BookController extends AbstractController
                 $error = $this->translator->trans('form.error.user_not_logged');
             }
         }
-        return $this->render('book/create.html.twig', [
+        return $this->render('book/add.html.twig', [
             'form' => $form->createView(),
             'error' => $error ?? false,
         ]);
@@ -59,6 +61,7 @@ class BookController extends AbstractController
         $book = $this->em->getRepository(Book::class)->find($request->get('id'));
         return $this->render('book/update.html.twig', [
             'book' => $book,
+            'first_page' => $this->pageManager->getFirstPageByBook($book),
         ]);
     }
 

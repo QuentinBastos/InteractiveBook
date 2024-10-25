@@ -51,12 +51,25 @@ class PageController extends AbstractController
     }
 
 
-    #[Route('/{bookId}/create/{pageId}/{parentId?}', name: 'page_create')]
-    public function create(int $bookId, int $pageId, Request $request, ?int $parentId = null): Response
+    #[Route('/{bookId}/create/{pageId}/{parentId?}', name: 'page_add')]
+    public function add(int $bookId, int $pageId, Request $request, ?int $parentId = null): Response
     {
         $isFirstPage = ($pageId === 1);
         $book = $this->em->getRepository(Book::class)->find($bookId);
-        $form = $this->createForm(PageCreateType::class);
+        $page = $this->em->getRepository(Page::class)->find($pageId);
+
+        if (!$page) {
+            $page = new Page();
+            $page->setBook($book);
+            if ($parentId) {
+                $parent = $this->em->getRepository(Page::class)->find($parentId);
+                if ($parent) {
+                    $page->setParent($parent);
+                }
+            }
+        }
+
+        $form = $this->createForm(PageCreateType::class, $page);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -64,29 +77,20 @@ class PageController extends AbstractController
                 throw $this->createNotFoundException('The book does not exist');
             }
 
-            $page = new Page();
-            $page->setBook($book);
             $page->setNumber($this->pageManager->getLastPageByBook($book) + 1);
             $page->setContent($form->get('apiMessage')->getData()['message']);
             $page->setFilePath($form->get('fileUpload')->getData()['file']);
 
-            if ($parentId) {
-                $parent = $this->em->getRepository(Page::class)->find($parentId);
-                if ($parent) {
-                    $page->setParent($parent);
-                }
-            }
-
             $this->em->persist($page);
             $this->em->flush();
 
-            return $this->render('page/added.html.twig', [
+            return $this->render('page/after_add.html.twig', [
                 'page' => $page,
                 'book' => $book,
             ]);
         }
 
-        return $this->render('page/create.html.twig', [
+        return $this->render('page/add.html.twig', [
             'previous_page' => $page ?? null,
             'page' => $page ?? null,
             'first_page' => $isFirstPage,

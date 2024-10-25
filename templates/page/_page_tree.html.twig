@@ -1,0 +1,12 @@
+<li>
+    <a href="{{ path('page_add', {'bookId': page.book.id, 'pageId': page.id}) }}">
+        {{ page.content }}
+    </a>
+    {% if page.children|length > 0 %}
+        <ul>
+            {% for child in page.children %}
+                {% include 'page/_page_tree.html.twig' with {'page': child} %}
+            {% endfor %}
+        </ul>
+    {% endif %}
+</li>
