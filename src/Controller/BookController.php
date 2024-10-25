@@ -35,7 +35,7 @@ class BookController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $this->getUser();
             if ($user instanceof User) {
-                $book = new Book($this->translator);
+                $book = new Book();
                 $book->setType($form->get('type')->getData());
                 $book->setTitle($form->get('title')->getData());
                 $book->setUser($this->getUser());

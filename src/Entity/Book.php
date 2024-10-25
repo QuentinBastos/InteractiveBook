@@ -6,7 +6,6 @@ use App\Repository\BookRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[ORM\Entity(repositoryClass: BookRepository::class)]
 class Book
@@ -37,9 +36,7 @@ class Book
     const string TYPE_POST_APOCALYPTIC = 'post_apocalyptic';
     const string TYPE_SATIRE = 'satire';
 
-    public function __construct(
-        private readonly TranslatorInterface $translator
-    )
+    public function __construct()
     {
         $this->pages = new ArrayCollection();
     }
@@ -61,6 +58,9 @@ class Book
 
     #[ORM\OneToMany(targetEntity: Page::class, mappedBy: 'book')]
     private Collection $pages;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $filePath = null;
 
     public function getId(): ?int
     {
@@ -134,6 +134,16 @@ class Book
         $this->pages = $pages;
     }
 
+    public function getFilePath(): ?string
+    {
+        return $this->filePath;
+    }
+
+    public function setFilePath(?string $filePath): void
+    {
+        $this->filePath = $filePath;
+    }
+    
     public static function getTypes(): array
     {
         $reflection = new \ReflectionClass(__CLASS__);

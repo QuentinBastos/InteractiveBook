@@ -1,3 +1,6 @@
+global:
+  file: Fichier
+
 header:
   about: À propos
   contact: Contact
@@ -11,6 +14,7 @@ footer:
   policy: Politique de confidentialité
   terms: Conditions d'utilisation
   copyright: © 2024-2024 N.GARCIA Q.BASTOS All Rights Reserved.
+
 button:
   submit: Envoyer
   cancel: Annuler
