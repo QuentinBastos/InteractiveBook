@@ -8,7 +8,7 @@
                 <li><a href="{{ path('app_login') }}">{{ "header.login"|trans }}</a></li>
                 <li><a href="{{ path('app_register') }}">{{ "header.register"|trans }}</a></li>
             {% else %}
-                <li><a href="{{ path('book_show') }}">{{ "header.all_books"|trans }}</a></li>
+                <li><a href="{{ path('book_show_all') }}">{{ "header.all_books"|trans }}</a></li>
                 <li><a href="{{ path('book_add') }}">{{ "header.add_book"|trans }}</a></li>
                 <li><a href="{{ path('app_logout') }}">{{ "header.logout"|trans }}</a></li>
             {% endif %}

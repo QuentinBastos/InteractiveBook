@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Book;
 use App\Entity\Page;
-use App\Form\FileUploadType;
 use App\Form\PageCreateType;
 use App\Manager\PageManager;
 use Doctrine\Common\Collections\ArrayCollection;
