@@ -7,6 +7,7 @@ use App\Entity\Page;
 use App\Form\FileUploadType;
 use App\Form\PageCreateType;
 use App\Manager\PageManager;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -62,6 +63,7 @@ class PageController extends AbstractController
             $message = 'add';
             $page = new Page();
             $page->setBook($book);
+            $page->setToTargets(new ArrayCollection());
             if ($parentId) {
                 $parent = $this->em->getRepository(Page::class)->find($parentId);
                 if ($parent) {
@@ -83,6 +85,12 @@ class PageController extends AbstractController
             $page->setNumber($this->pageManager->getLastPageByBook($book) + 1);
             $page->setContent($form->get('content')->getData());
             $page->setFilePath($form->get('filePath')->getData());
+
+            foreach ($page->getToTargets() as $target) {
+                $target->setFromPage($page);
+                $this->em->persist($target);
+            }
+
 
             $this->em->persist($page);
             $this->em->flush();
