@@ -2,7 +2,7 @@
 {% block body %}
     <twig:header/>
     <main class="flex flex-col items-center mt-8">
-        <twig:button text="THE GOOD KNIGHT"/>
+        <twig:button text="THE GOOD KNIGHT" linkText="{{ path('book_add') }}"/>
         <h1 class="mt-8 text-7xl font-medium w-1/2 text-center">The Story Of The</h1>
         <h1 class="text-8xl font-medium w-1/2 text-center">Dilmays Kingdom</h1>
         <div class="castel-home">
@@ -19,7 +19,7 @@
                 frtfvfvygfgcvfyhyloretftfrtfvfvygfgcvfyhyloretftfrtfvfvygfgcvfyhyloretftfrtfvfvygfgcvfyhyhy
             </p>
             <div class="relative top-[70%] left-[45%] scale-150 w-fit">
-                <twig:button text="START THE STORY"/>
+                <twig:button text="START THE STORY" linkText="{{ path('book_add') }}"/>
             </div>
         </div>
         <twig:footer/>
