@@ -2,8 +2,16 @@
     <div class="inline-flex w-full justify-between px-20 pt-12 font-medium text-2xl">
         <h1>InteractiveBook.</h1>
         <ul class="flex gap-6">
-            <li>{{ "header.about"|trans }}</li>
-            <li>{{ "header.contact"|trans }}</li>
+            <li><a href="{{ path('app_about') }}">{{ "header.about"|trans }}</a></li>
+            <li><a href="{{ path('app_contact') }}">{{ "header.contact"|trans }}</a></li>
+            {% if not app.user %}
+                <li><a href="{{ path('app_login') }}">{{ "header.login"|trans }}</a></li>
+                <li><a href="{{ path('app_register') }}">{{ "header.register"|trans }}</a></li>
+            {% else %}
+                <li><a href="{{ path('book_show') }}">{{ "header.all_books"|trans }}</a></li>
+                <li><a href="{{ path('book_add') }}">{{ "header.add_book"|trans }}</a></li>
+                <li><a href="{{ path('app_logout') }}">{{ "header.logout"|trans }}</a></li>
+            {% endif %}
         </ul>
     </div>
 </header>

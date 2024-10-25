@@ -26,32 +26,6 @@ class PageController extends AbstractController
     {
     }
 
-    #[Route('/upload', name: 'page_upload')]
-    public function upload(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $page = new Page();
-        $form = $this->createForm(FileUploadType::class);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $file = $form->get('file')->getData();
-            if ($file) {
-                $fileName = uniqid() . '.' . $file->guessExtension();
-                $file->move($this->getParameter('uploads_directory'), $fileName);
-                $page->setFilePath($fileName);
-                $entityManager->persist($page);
-                $entityManager->flush();
-
-                return $this->redirectToRoute('api_request');
-            }
-        }
-
-        return $this->render('page/upload.html.twig', [
-            'form' => $form->createView(),
-        ]);
-    }
-
-
     #[Route('/{bookId}/add/{pageId}/{parentId?}', name: 'page_add')]
     public function add(int $bookId, int $pageId, Request $request, ?int $parentId = null): Response
     {

@@ -1,6 +1,11 @@
 header:
   about: À propos
   contact: Contact
+  login: Connexion
+  register: Inscription
+  logout: Déconnexion
+  add_book: Créer votre propre livre
+  all_books: Tous les livres
 
 footer:
   policy: Politique de confidentialité

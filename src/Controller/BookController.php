@@ -22,7 +22,7 @@ class BookController extends AbstractController
     public function __construct(
         private readonly TranslatorInterface    $translator,
         private readonly EntityManagerInterface $em,
-        private readonly PageManager $pageManager,
+        private readonly PageManager            $pageManager,
     )
     {
     }
@@ -65,7 +65,13 @@ class BookController extends AbstractController
         ]);
     }
 
-    #[Route('/show', name: 'book_show')]
+    #[Route('/show', name: 'book_show_all')]
+    public function showAll(Request $request): Response
+    {
+        return $this->render('book/show_all.html.twig');
+    }
+
+    #[Route('/show/{id}', name: 'book_show')]
     public function show(Request $request): Response
     {
         return $this->render('book/show.html.twig');
