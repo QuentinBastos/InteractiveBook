@@ -1,4 +1,5 @@
 {% extends 'base.html.twig' %}
+{% set last_id = get_last_page_id_plus_one() %}
 {% block body %}
     {% if book is defined and book %}
         <h1>{{ book.title }}</h1>

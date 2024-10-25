@@ -2,6 +2,16 @@
     <a href="{{ path('page_add', {'bookId': page.book.id, 'pageId': page.id}) }}">
         {{ page.content }}
     </a>
+    <a href="{{ path('page_add', {'bookId': book.id, 'pageId': last_id, 'parentId': page.id}) }}"
+       class="btn btn-primary">
+        Add Child Page
+    </a>
+
+    <a href="{{ path('page_add', {'bookId': book.id, 'pageId': last_id, 'parentId': page.parent ? page.parent.id : null}) }}"
+       class="btn btn-secondary">
+        Add Sibling Page
+    </a>
+    <br>
     {% if page.children|length > 0 %}
         <ul>
             {% for child in page.children %}

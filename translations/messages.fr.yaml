@@ -37,3 +37,9 @@ book:
     coming_of_age: Roman d'apprentissage
     post_apocalyptic: Post-apocalyptique
     satire: Satire
+
+page:
+  edit:
+    message: La page a été modifiée avec succès
+  add:
+    message: La page a été ajoutée avec succès

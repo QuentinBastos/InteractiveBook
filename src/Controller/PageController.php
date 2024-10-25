@@ -59,6 +59,7 @@ class PageController extends AbstractController
         $page = $this->em->getRepository(Page::class)->find($pageId);
 
         if (!$page) {
+            $message = 'add';
             $page = new Page();
             $page->setBook($book);
             if ($parentId) {
@@ -67,6 +68,8 @@ class PageController extends AbstractController
                     $page->setParent($parent);
                 }
             }
+        } else {
+            $message = 'edit';
         }
 
         $form = $this->createForm(PageCreateType::class, $page);
@@ -87,6 +90,7 @@ class PageController extends AbstractController
             return $this->render('page/after_add.html.twig', [
                 'page' => $page,
                 'book' => $book,
+                'message' => $message,
             ]);
         }
 

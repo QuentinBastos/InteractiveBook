@@ -1,13 +1,14 @@
 {% extends 'base.html.twig' %}
 {% block body %}
-    LA PAGE ID : {{ page.id }} A ETE AJOUTEE AVEC SUCCES
+    {% set last_id = get_last_page_id_plus_one() %}
+    {{ ("page." ~ message ~ ".message")|trans }}
     <br>
-    <a href="{{ path('page_add', {'bookId': book.id, 'pageId': page.id, 'parentId': page.id}) }}"
+    <a href="{{ path('page_add', {'bookId': book.id, 'pageId': last_id, 'parentId': page.id}) }}"
        class="btn btn-primary">
         Add Child Page
     </a>
     <br>
-    <a href="{{ path('page_add', {'bookId': book.id, 'pageId': page.id, 'parentId': page.parent ? page.parent.id : null}) }}"
+    <a href="{{ path('page_add', {'bookId': book.id, 'pageId': last_id, 'parentId': page.parent ? page.parent.id : null}) }}"
        class="btn btn-secondary">
         Add Sibling Page
     </a>
