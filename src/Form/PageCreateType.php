@@ -2,10 +2,13 @@
 
 namespace App\Form;
 
+use App\Entity\Page;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -28,19 +31,23 @@ class PageCreateType extends AbstractType
                     'class' => 'form-control',
                 ],
             ])
-            ->add('target', CollectionType::class, [
+            ->add('toTargets', CollectionType::class, [
                 'entry_type' => TargetType::class,
                 'entry_options' => ['label' => false],
                 'allow_add' => true,
                 'allow_delete' => true,
                 'by_reference' => false,
             ])
-            ->add('apiMessage', ApiType::class, [
-                'label' => false,
+            ->add('content', TextareaType::class, [
+                'label' => $this->translator->trans('form.message'),
+                'attr' => [
+                    'class' => 'form-control',
+                ],
             ])
-            ->add('fileUpload', FileUploadType::class, [
-                'label' => false,
+            ->add('filePath', FileType::class, [
+                'label' => 'button.upload',
                 'required' => false,
+                'data_class' => null,
             ])
             ->add('submit', SubmitType::class, [
                 'label' => $this->translator->trans('button.submit'),
@@ -53,7 +60,7 @@ class PageCreateType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => null,
+            'data_class' => Page::class,
         ]);
     }
 }

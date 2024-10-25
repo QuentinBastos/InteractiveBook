@@ -51,7 +51,7 @@ class PageController extends AbstractController
     }
 
 
-    #[Route('/{bookId}/create/{pageId}/{parentId?}', name: 'page_add')]
+    #[Route('/{bookId}/add/{pageId}/{parentId?}', name: 'page_add')]
     public function add(int $bookId, int $pageId, Request $request, ?int $parentId = null): Response
     {
         $isFirstPage = ($pageId === 1);
@@ -78,8 +78,8 @@ class PageController extends AbstractController
             }
 
             $page->setNumber($this->pageManager->getLastPageByBook($book) + 1);
-            $page->setContent($form->get('apiMessage')->getData()['message']);
-            $page->setFilePath($form->get('fileUpload')->getData()['file']);
+            $page->setContent($form->get('content')->getData());
+            $page->setFilePath($form->get('filePath')->getData());
 
             $this->em->persist($page);
             $this->em->flush();

@@ -6,8 +6,6 @@
         <br>
         <br>
         <br>
-    {% elseif page.parent is defined and page.parent %}
-        {{ page.parent.title }}
     {% endif %}
     {% if book is defined and book is not null %}
         Book ID: {{ book.id }}
@@ -20,12 +18,12 @@
         {% if form is defined and form %}
             {{ form_start(form) }}
             {{ form_row(form.struct) }}
-            {{ form_row(form.apiMessage) }}
-            {{ form_row(form.fileUpload) }}
+            {{ form_row(form.content) }}
+            {{ form_row(form.filePath) }}
         {% endif %}
     {% endif %}
     {% if first_page is defined and first_page == false %}
-        {{ form_row(form.target) }}
+        {{ form_row(form.toTargets) }}
     {% endif %}
     {{ form_row(form.submit) }}
     {{ form_end(form) }}

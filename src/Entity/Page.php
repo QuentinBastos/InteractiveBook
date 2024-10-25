@@ -40,6 +40,9 @@ class Page
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $filePath = null;
 
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $struct = null;
+
     #[ORM\OneToMany(targetEntity: Target::class, mappedBy: 'fromPage')]
     private Collection $fromTargets;
 
@@ -195,5 +198,15 @@ class Page
     public function setNumber(?int $number): void
     {
         $this->number = $number;
+    }
+
+    public function getStruct(): ?string
+    {
+        return $this->struct;
+    }
+
+    public function setStruct(?string $struct): void
+    {
+        $this->struct = $struct;
     }
 }
