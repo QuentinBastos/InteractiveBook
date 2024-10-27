@@ -26,8 +26,10 @@
 {% endblock %}
 
 {% block stylesheets %}
+    {{ parent() }}
     {{ encore_entry_link_tags('home_css') }}
 {% endblock %}
 
 {% block javascripts %}
+    {{ parent() }}
 {% endblock %}

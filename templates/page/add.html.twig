@@ -23,7 +23,15 @@
         {% endif %}
     {% endif %}
     {% if first_page is defined and first_page == false %}
-        {{ form_row(form.toTargets) }}
+        <button type="button" class="add_item_link" data-collection-holder-class="targets">Add a target</button>
+        <ul class="targets"
+            data-index="{{ form.toTargets|length > 0 ? form.toTargets|last.vars.name + 1 : 0 }}"
+            data-prototype="{{ form_widget(form.toTargets.vars.prototype)|e('html_attr') }}"
+        >
+            {% for toTarget in form.toTargets %}
+                <li> {{ form_row(toTarget.toPage) }}</li>
+            {% endfor %}
+        </ul>
     {% endif %}
     {{ form_row(form.submit) }}
     {{ form_end(form) }}

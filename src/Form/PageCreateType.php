@@ -11,35 +11,32 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class PageCreateType extends AbstractType
 {
-    private TranslatorInterface $translator;
-
-    public function __construct(TranslatorInterface $translator)
-    {
-        $this->translator = $translator;
-    }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $book = $options['book'];
+
         $builder
+            ->add('title', null, [
+                'label' => 'form.title',
+            ])
             ->add('struct', ChoiceType::class, [
-                'label' => $this->translator->trans('form.message'),
+                'label' => 'form.message',
                 'attr' => [
                     'class' => 'form-control',
                 ],
             ])
             ->add('toTargets', CollectionType::class, [
                 'entry_type' => TargetType::class,
-                'entry_options' => ['fromPage' => $options['fromPage'], 'label' => false],
                 'allow_add' => true,
+                'entry_options' => ['book' => $book],
                 'allow_delete' => true,
-                'by_reference' => false,
             ])
             ->add('content', TextareaType::class, [
-                'label' => $this->translator->trans('form.message'),
+                'label' => 'form.message',
                 'attr' => [
                     'class' => 'form-control',
                 ],
@@ -50,7 +47,7 @@ class PageCreateType extends AbstractType
                 'data_class' => null,
             ])
             ->add('submit', SubmitType::class, [
-                'label' => $this->translator->trans('button.submit'),
+                'label' => 'button.submit',
                 'attr' => [
                     'class' => 'btn btn-primary',
                 ],
@@ -61,7 +58,7 @@ class PageCreateType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Page::class,
-            'fromPage' => null,
+            'book' => null,
         ]);
     }
 }

@@ -32,6 +32,8 @@ class Page
     private ?Book $book = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $title = null;
+    #[ORM\Column(type: 'text', nullable: true)]
     private ?string $content = null;
 
     #[ORM\Column(type: 'boolean', options: ['default' => false])]
@@ -43,10 +45,10 @@ class Page
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $struct = null;
 
-    #[ORM\OneToMany(targetEntity: Target::class, mappedBy: 'fromPage')]
+    #[ORM\OneToMany(targetEntity: Target::class, mappedBy: 'fromPage', cascade: ['persist', 'remove'])]
     private Collection $fromTargets;
 
-    #[ORM\OneToMany(targetEntity: Target::class, mappedBy: 'toPage')]
+    #[ORM\OneToMany(targetEntity: Target::class, mappedBy: 'toPage', cascade: ['persist', 'remove'])]
     private Collection $toTargets;
 
     public function __construct()
@@ -208,5 +210,15 @@ class Page
     public function setStruct(?string $struct): void
     {
         $this->struct = $struct;
+    }
+
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    public function setTitle(?string $title): void
+    {
+        $this->title = $title;
     }
 }

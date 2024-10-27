@@ -16,11 +16,10 @@ class BookCreateType extends AbstractType
 {
 
 
-    private TranslatorInterface $translator;
-
-    public function __construct(TranslatorInterface $translator)
+    public function __construct(
+        private readonly TranslatorInterface $translator
+    )
     {
-        $this->translator = $translator;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -28,7 +27,7 @@ class BookCreateType extends AbstractType
         $book = new Book();
         $builder
             ->add('title', TextareaType::class, [
-                'label' => $this->translator->trans('form.message'),
+                'label' => 'form.message',
                 'attr' => [
                     'class' => 'form-control',
                 ],
@@ -39,7 +38,7 @@ class BookCreateType extends AbstractType
                 'data_class' => null,
             ])
             ->add('type', ChoiceType::class, [
-                'label' => $this->translator->trans('form.type'),
+                'label' => 'form.type',
                 'choices' => $book->getTypes(),
                 'choice_label' => function ($choice) {
                     return $this->translator->trans('book.type.' . $choice);
@@ -49,7 +48,7 @@ class BookCreateType extends AbstractType
                 },
             ])
             ->add('submit', SubmitType::class, [
-                'label' => $this->translator->trans('button.submit'),
+                'label' => 'button.submit',
             ]);
     }
 

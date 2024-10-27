@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\BookRepository;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -61,6 +62,12 @@ class Book
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $filePath = null;
+
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private ?DateTime $createdAt = null;
+
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private ?DateTime $updatedAt = null;
 
     public function getId(): ?int
     {
@@ -143,7 +150,27 @@ class Book
     {
         $this->filePath = $filePath;
     }
-    
+
+    public function getCreatedAt(): ?DateTime
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(?DateTime $createdAt): void
+    {
+        $this->createdAt = $createdAt;
+    }
+
+    public function getUpdatedAt(): ?DateTime
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(?DateTime $updatedAt): void
+    {
+        $this->updatedAt = $updatedAt;
+    }
+
     public static function getTypes(): array
     {
         $reflection = new \ReflectionClass(__CLASS__);

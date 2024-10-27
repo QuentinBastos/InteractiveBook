@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Book;
 use App\Entity\Page;
+use App\Entity\Target;
 use App\Form\PageCreateType;
 use App\Manager\PageManager;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -47,7 +48,9 @@ class PageController extends AbstractController
             $message = 'edit';
         }
 
-        $form = $this->createForm(PageCreateType::class, $page);
+        $form = $this->createForm(PageCreateType::class, $page, [
+            'book' => $book,
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -59,9 +62,14 @@ class PageController extends AbstractController
             $page->setContent($form->get('content')->getData());
             $page->setFilePath($form->get('filePath')->getData());
 
-            foreach ($page->getToTargets() as $target) {
-                $target->setFromPage($page);
-                $this->em->persist($target);
+            $toTargets = $form->get('toTargets')->getData();
+            if ($toTargets instanceof ArrayCollection) {
+                foreach ($toTargets as $target) {
+                    if ($target instanceof Target) {
+                        $target->setFromPage($page);
+                        $this->em->persist($target);
+                    }
+                }
             }
 
 

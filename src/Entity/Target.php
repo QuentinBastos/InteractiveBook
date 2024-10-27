@@ -16,9 +16,9 @@ class Target
 
     #[ORM\JoinColumn(nullable: false)]
     #[ORM\ManyToOne(targetEntity: Page::class, inversedBy: 'fromTargets')]
-    private ?Page $fromPage = null;
+    private Page $fromPage;
 
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     #[ORM\ManyToOne(targetEntity: Page::class, inversedBy: 'toTargets')]
     private ?Page $toPage = null;
 

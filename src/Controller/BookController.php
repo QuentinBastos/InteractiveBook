@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+
 use App\Entity\Book;
 use App\Entity\Page;
 use App\Entity\User;
@@ -36,9 +37,12 @@ class BookController extends AbstractController
             $user = $this->getUser();
             if ($user instanceof User) {
                 $book = new Book();
+                $now = new \DateTime();
                 $book->setType($form->get('type')->getData());
                 $book->setTitle($form->get('title')->getData());
                 $book->setUser($this->getUser());
+                $book->setCreatedAt($now);
+                $book->setUpdatedAt($now);
                 $this->em->persist($book);
                 $this->em->flush();
                 return $this->redirectToRoute('page_add', [
