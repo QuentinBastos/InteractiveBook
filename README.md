@@ -26,3 +26,7 @@ The project is structured as follows:
     - The `src/Controller/RegistrationController.php` file contains the controller that handles the requests for the registration page.
     - The `src/Controller/InfoController.php` file contains the controller that handles the requests for the info page like contact, about, etc...
 ```
+
+## Contact 
+
+For more informations, please contact quentin.bastos@etu.univ-lyon1.fr or nathan.garcia@etu.univ-lyon1.fr
