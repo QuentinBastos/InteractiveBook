@@ -8,10 +8,12 @@
         Add Child Page
     </a>
     <br>
+    {% if first_page is defined and first_page == false %}
     <a href="{{ path('page_add', {'bookId': book.id, 'pageId': last_id, 'parentId': page.parent ? page.parent.id : null}) }}"
        class="btn btn-secondary">
         Add Sibling Page
     </a>
+    {% endif %}
     <a href="{{ path('book_update', {'id': book.id}) }}">
         Back to Book
 {% endblock %}

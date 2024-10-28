@@ -1,5 +1,6 @@
 {% extends 'base.html.twig' %}
 {% block body %}
+    <twig:header/>
     {% if error is defined and error != false %}
         {{ error }}
     {% endif %}
@@ -9,4 +10,12 @@
         {{ form_row(form.filePath) }}
         {{ form_end(form) }}
     </div>
+{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('home_css') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
 {% endblock %}

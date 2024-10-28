@@ -9,25 +9,39 @@ use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class PageCreateType extends AbstractType
 {
 
+
+    public function __construct(
+        private readonly TranslatorInterface $translator
+    )
+    {
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $book = $options['book'];
+        $page = new Page();
 
         $builder
-            ->add('title', null, [
+            ->add('title', TextType::class, [
                 'label' => 'form.title',
             ])
             ->add('struct', ChoiceType::class, [
-                'label' => 'form.message',
-                'attr' => [
-                    'class' => 'form-control',
-                ],
+                'label' => 'page.form.struct',
+                'choices' => $page->getStructChoices(),
+                'choice_label' => function ($choice) {
+                    return $this->translator->trans($choice);
+                },
+                'choice_value' => function ($choice) {
+                    return $choice;
+                },
             ])
             ->add('toTargets', CollectionType::class, [
                 'entry_type' => TargetType::class,
@@ -36,10 +50,7 @@ class PageCreateType extends AbstractType
                 'allow_delete' => true,
             ])
             ->add('content', TextareaType::class, [
-                'label' => 'form.message',
-                'attr' => [
-                    'class' => 'form-control',
-                ],
+                'label' => 'page.form.message',
             ])
             ->add('filePath', FileType::class, [
                 'label' => 'button.upload',
@@ -48,9 +59,6 @@ class PageCreateType extends AbstractType
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'button.submit',
-                'attr' => [
-                    'class' => 'btn btn-primary',
-                ],
             ]);
     }
 

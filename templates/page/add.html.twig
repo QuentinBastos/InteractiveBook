@@ -1,10 +1,8 @@
 {% extends 'base.html.twig' %}
 {% block body %}
+    <twig:header/>
     {% if first_page is defined and first_page == true %}
         BIENVENUE SUR LA PREMIERE PAGE DE VOTRE LIVRE
-        <br>
-        <br>
-        <br>
         <br>
     {% endif %}
     {% if book is defined and book is not null %}
@@ -17,6 +15,7 @@
         Book user: {{ book.user.email }}
         {% if form is defined and form %}
             {{ form_start(form) }}
+            {{ form_row(form.title) }}
             {{ form_row(form.struct) }}
             {{ form_row(form.content) }}
             {{ form_row(form.filePath) }}
@@ -35,4 +34,13 @@
     {% endif %}
     {{ form_row(form.submit) }}
     {{ form_end(form) }}
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('home_css') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
 {% endblock %}

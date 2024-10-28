@@ -26,6 +26,7 @@ form:
   type: Type de message
   error:
     user_not_logged: Veuillez vous connecter
+  title: Titre
 
 book:
   type:
@@ -60,3 +61,11 @@ page:
     message: La page a été modifiée avec succès
   add:
     message: La page a été ajoutée avec succès
+  struct:
+    top: Haut de page
+    bottom: Bas de page
+    double_page_left: Double page (image à gauche)
+    double_page_right: Double page (image à droite)
+  form:
+    struct: Emplacement de l'image
+    message: Message à l'intelligence artificielle pour générer du contenu

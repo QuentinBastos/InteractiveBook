@@ -12,6 +12,11 @@ class Page
 {
     const int NO_PAGE = 0;
     const int FIRST_PAGE = 1;
+    const string STRUCT_TOP = 'top';
+    const string STRUCT_BOTTOM = 'bottom';
+    const string STRUCT_DOUBLE_PAGE_LEFT = 'double_page_left';
+    const string STRUCT_DOUBLE_PAGE_RIGHT = 'double_page_right';
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -220,5 +225,15 @@ class Page
     public function setTitle(?string $title): void
     {
         $this->title = $title;
+    }
+
+    public static function getStructChoices(): array
+    {
+        return [
+            self::STRUCT_TOP => 'page.struct.top',
+            self::STRUCT_BOTTOM => 'page.struct.bottom',
+            self::STRUCT_DOUBLE_PAGE_LEFT => 'page.struct.double_page_left',
+            self::STRUCT_DOUBLE_PAGE_RIGHT => 'page.struct.double_page_right',
+        ];
     }
 }
