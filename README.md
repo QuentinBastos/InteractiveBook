@@ -10,6 +10,7 @@ Here a short project in Symfony created by using a OpenAI API to generate intera
 5. Run `symfony server:start`
 6. Open your browser and go to `http://localhost:8000`
 7. Enjoy the project
+8. With XDEBUG Symfony : U sould use this line to activate the XDEBUG session `set XDEBUG_SESSION=1`.
 
 ## Project description
 
@@ -30,3 +31,16 @@ The project is structured as follows:
 ## Contact 
 
 For more informations, please contact quentin.bastos@etu.univ-lyon1.fr or nathan.garcia@etu.univ-lyon1.fr
+
+## Docker
+```
+    - docker-compose up -d
+    - In docker "web" container : composer install
+    - In docker "web" container : npm install
+    - In docker "web" container : php bin/console doctrine:database:create
+    - In docker "web" container : php bin/console doctrine:migrations:migrate
+    
+    docker-compose down   # Stop and remove the containers
+    docker-compose up --build   # Rebuild the containers and start them
+
+```
