@@ -14,5 +14,5 @@ done
 mysql -h db -u root -e "CREATE DATABASE IF NOT EXISTS \`${MYSQL_DATABASE}\`;"
 
 # Run migrations
-cd /var/www/html
+cd /var/www
 php bin/console doctrine:migrations:migrate --no-interaction
