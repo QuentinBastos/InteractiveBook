@@ -5,9 +5,37 @@ services:
       - "8080:80"
     volumes:
       - .:/var/www/html
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      MYSQL_DATABASE: InteractiveBook
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+    command: ["sh", "-c", "/usr/local/bin/wait-for-it.sh db -- /usr/local/bin/init.sh && apache2-foreground"]
 
   db:
     image: mysql:5.7
     environment:
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_ALLOW_EMPTY_PASSWORD: ${MYSQL_ALLOW_EMPTY_PASSWORD}
+      MYSQL_DATABASE: InteractiveBook
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: db
+      MYSQL_DATABASE: InteractiveBook
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+
+  npm:
+    build: .
+    volumes:
+      - .:/var/www/html
+    working_dir: /var/www/html
+    command: [ "npm", "run", "watch" ]
