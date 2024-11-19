@@ -8,7 +8,8 @@ RUN apt-get update && apt-get install -y \
   libpng-dev \
   libzip-dev \
   default-mysql-client \
-  nano  # Added nano installation
+  nano \
+  dos2unix
 
 # Install PHP extensions
 RUN docker-php-ext-install pdo pdo_mysql zip gd
