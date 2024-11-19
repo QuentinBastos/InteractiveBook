@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Repository;
+namespace App\Repository\Book;
 
-use App\Entity\Book;
+use App\Entity\Book\Book;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use Doctrine\Persistence\ManagerRegistry;
 
 class BookRepository extends ServiceEntityRepository
 {

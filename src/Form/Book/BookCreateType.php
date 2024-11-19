@@ -2,7 +2,7 @@
 
 namespace App\Form\Book;
 
-use App\Entity\Book;
+use App\Entity\Book\Book;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;

@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\Book;
+use App\Entity\Book\Book;
 use App\Entity\Page;
 use App\Entity\Target;
 use App\Form\Page\PageCreateType;

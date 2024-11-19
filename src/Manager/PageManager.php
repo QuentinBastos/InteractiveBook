@@ -2,7 +2,7 @@
 
 namespace App\Manager;
 
-use App\Entity\Book;
+use App\Entity\Book\Book;
 use App\Entity\Page;
 
 class PageManager

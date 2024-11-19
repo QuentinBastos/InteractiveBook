@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 
-use App\Entity\Book;
+use App\Entity\Book\Book;
 use App\Entity\Page;
 use App\Entity\User;
 use App\Form\Book\BookCreateType;

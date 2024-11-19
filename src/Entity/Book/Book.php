@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Book;
 
-use App\Repository\BookRepository;
+use App\Entity\Page;
+use App\Entity\User;
+use App\Repository\Book\BookRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
