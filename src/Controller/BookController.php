@@ -8,12 +8,14 @@ use App\Entity\Page;
 use App\Entity\User;
 use App\Form\BookCreateType;
 use App\Manager\PageManager;
+use App\Utils\Constants;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Knp\Component\Pager\PaginatorInterface;
 
 
 #[Route('/book')]
@@ -69,16 +71,29 @@ class BookController extends AbstractController
         ]);
     }
 
+
     #[Route('/show', name: 'book_show_all')]
-    public function showAll(Request $request): Response
+    public function showAll(Request $request, PaginatorInterface $paginator): Response
     {
         $search = $request->query->get('search', '');
+        $page = $request->query->getInt('page', 1);
+        $limit = Constants::PAGE_LIMIT;
 
-        $books = $this->em->getRepository(Book::class)->findByTitle($search);
+        $result = $this->em->getRepository(Book::class)->get($page, $limit, $search);
+        $totalItems = $result['totalItems'];
+        $books = $result['items'];
+
+        $totalPages = ceil($totalItems / $limit);
+        $nextPage = $page < $totalPages ? $page + 1 : null;
+        $prevPage = $page > 1 ? $page - 1 : null;
 
         return $this->render('book/show_all.html.twig', [
             'books' => $books,
             'search' => $search,
+            'currentPage' => $page,
+            'nextPage' => $nextPage,
+            'prevPage' => $prevPage,
+            'totalPages' => $totalPages,
         ]);
     }
 

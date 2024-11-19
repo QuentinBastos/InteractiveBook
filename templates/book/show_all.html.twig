@@ -18,14 +18,27 @@
             </button>
         </form>
         <ul class="grid grid-cols-5 gap-28 ">
-            {% for book in books %}
-                <li>
-                    <img src="{{ asset('uploads/671792937df75.png') }}" alt="name"/>
-                    <p>{{ book.title }}</p>
-                    <p>daeda</p>
-                </li>
-            {% endfor %}
+            {% if books is defined and books is not empty %}
+                {% for book in books %}
+                    <li>
+                        <img src="{{ asset('uploads/671792937df75.png') }}" alt="name"/>
+                        <p>{{ book.title }}</p>
+                        <p>daeda</p>
+                    </li>
+                {% endfor %}
         </ul>
+        <div class="pagination">
+            {% if prevPage %}
+                <a href="{{ path('book_show_all', { page: 1, search: search }) }}">{{ "paginator.first"|trans }}</a>
+                <a href="{{ path('book_show_all', { page: prevPage, search: search }) }}">{{ "paginator.previous"|trans }}</a>
+            {% endif %}
+            <span>Page {{ currentPage }} of {{ totalPages }}</span>
+            {% if nextPage %}
+                <a href="{{ path('book_show_all', { page: nextPage, search: search }) }}">{{ "paginator.next"|trans }}</a>
+                <a href="{{ path('book_show_all', { page: totalPages, search: search }) }}">{{ "paginator.last"|trans }}</a>
+            {% endif %}
+        </div>
+        {% endif %}
     </div>
 {% endblock %}
 {% block stylesheets %}

@@ -69,3 +69,9 @@ page:
   form:
     struct: Emplacement de l'image
     message: Message à l'intelligence artificielle pour générer du contenu
+
+paginator:
+  previous: Précédent
+  next: Suivant
+  last: Dernière page
+  first: Première page
