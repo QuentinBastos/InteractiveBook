@@ -1,10 +1,36 @@
 {% extends 'base.html.twig' %}
 {% block body %}
     <twig:header/>
+    <div class="mt-12 px-12">
+        <h1>List of books</h1>
+        <form method="get" action="{{ path('book_show_all') }}" class="mb-6">
+            <label>
+                <input
+                        type="text"
+                        name="search"
+                        placeholder="Rechercher un livre par titre..."
+                        value="{{ search }}"
+                        class="border rounded px-4 py-2 w-1/2"
+                />
+            </label>
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">
+                Rechercher
+            </button>
+        </form>
+        <ul class="grid grid-cols-5 gap-28 ">
+            {% for book in books %}
+                <li>
+                    <img src="{{ asset('uploads/671792937df75.png') }}" alt="name"/>
+                    <p>{{ book.title }}</p>
+                    <p>daeda</p>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
 {% endblock %}
 {% block stylesheets %}
     {{ parent() }}
-    {{ encore_entry_link_tags('home_css') }}
+    {{ encore_entry_link_tags('app_css') }}
 {% endblock %}
 
 {% block javascripts %}

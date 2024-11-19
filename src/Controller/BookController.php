@@ -72,7 +72,14 @@ class BookController extends AbstractController
     #[Route('/show', name: 'book_show_all')]
     public function showAll(Request $request): Response
     {
-        return $this->render('book/show_all.html.twig');
+        $search = $request->query->get('search', '');
+
+        $books = $this->em->getRepository(Book::class)->findByTitle($search);
+
+        return $this->render('book/show_all.html.twig', [
+            'books' => $books,
+            'search' => $search,
+        ]);
     }
 
     #[Route('/show/{id}', name: 'book_show')]

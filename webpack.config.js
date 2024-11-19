@@ -8,15 +8,12 @@ Encore
     .setOutputPath('public/build/')
 
     .setPublicPath('/build')
-
-    .addEntry('app_js', './assets/app.js')
-    .addStyleEntry('home_css', './assets/styles/home.scss')
-    .enableStimulusBridge('./assets/controllers.json')
-
-    .splitEntryChunks()
-    .enableSingleRuntimeChunk()
-    .enableSassLoader()
+    .addEntry('app', './assets/app.js') // Exemple : si le fichier est à la racine d'assetsncipale
+    .addStyleEntry('home_css', './assets/styles/home.scss') // Styles pour la page d'accueil
+    .addStyleEntry('app_css', './assets/styles/app.scss') // Styles globaux
     .enablePostCssLoader()
+    .enableSassLoader()
+    .enableSingleRuntimeChunk()
 
     .cleanupOutputBeforeBuild()
 
