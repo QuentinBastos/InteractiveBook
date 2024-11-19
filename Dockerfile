@@ -9,7 +9,12 @@ RUN apt-get update && apt-get install -y \
   libzip-dev \
   default-mysql-client \
   nano \
-  dos2unix
+  dos2unix \
+  curl
+
+# Add NodeSource repository and install Node.js and npm
+RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - && \
+    apt-get install -y nodejs
 
 # Install PHP extensions
 RUN docker-php-ext-install pdo pdo_mysql zip gd
@@ -17,22 +22,15 @@ RUN docker-php-ext-install pdo pdo_mysql zip gd
 # Enable Apache mod_rewrite
 RUN a2enmod rewrite
 
-# Install Node.js and npm
-RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - && \
-    apt-get install -y nodejs
-
 # Copy the custom apache.conf file into the container
 COPY config/apache/apache.conf /etc/apache2/sites-available/000-default.conf
 
 # Set working directory
 WORKDIR /var/www
 
-# Copy application files into the container
+# Copy application files into the container, excluding the vendor folder
 COPY . /var/www
-
-# Set the correct permissions for the 'var' and 'public' directories
-RUN chown -R www-data:www-data /var/www/var /var/www/public && \
-    chmod -R 775 /var/www/var /var/www/public
+RUN rm -rf /var/www/vendor
 
 # Install Composer (from the official Composer image)
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -40,6 +38,12 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Install Composer dependencies
 RUN COMPOSER_ALLOW_SUPERUSER=1 composer install --no-scripts --no-autoloader
 
+# Copy the vendor folder into the container
+COPY vendor /var/www/vendor
+
+# Set the correct permissions for the 'var' and 'public' directories
+RUN chown -R www-data:www-data /var/www/var /var/www/public && \
+    chmod -R 775 /var/www/var /var/www/public
 # Copy the init script into the container
 COPY wait-for-it.sh /usr/local/bin/wait-for-it.sh
 RUN chmod +x /usr/local/bin/wait-for-it.sh

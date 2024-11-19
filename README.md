@@ -30,7 +30,7 @@ The project is structured as follows:
 
 ## Contact 
 
-For more informations, please contact quentin.bastos@etu.univ-lyon1.fr or nathan.garcia@etu.univ-lyon1.fr
+For more information, please contact quentin.bastos@etu.univ-lyon1.fr or nathan.garcia@etu.univ-lyon1.fr
 
 ## Docker
 ```
@@ -42,5 +42,7 @@ For more informations, please contact quentin.bastos@etu.univ-lyon1.fr or nathan
     
     docker-compose down   # Stop and remove the containers
     docker-compose up --build   # Rebuild the containers and start them
+    
+    REBUILD THE COMPOSER WHEN YOU ADD A NEW DEPENDENCY
 
 ```

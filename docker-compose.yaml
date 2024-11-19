@@ -1,10 +1,14 @@
 services:
   web:
     build: .
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
     ports:
       - "8080:80"
     volumes:
       - .:/var/www
+      - vendor:/var/www/vendor
     depends_on:
       db:
         condition: service_healthy
@@ -39,3 +43,6 @@ services:
       - .:/var/www
     working_dir: /var/www
     command: [ "npm", "run", "watch" ]
+
+volumes:
+  vendor:
