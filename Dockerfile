@@ -48,6 +48,8 @@ RUN chmod +x /usr/local/bin/init.sh
 
 RUN npm run build
 
+RUN dos2unix /usr/local/bin/wait-for-it.sh /usr/local/bin/init.sh
+
 # Expose port 80
 EXPOSE 80
 
