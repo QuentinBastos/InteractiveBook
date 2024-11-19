@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Form;
+namespace App\Form\Target;
 
 use App\Entity\Page;
 use App\Entity\Target;

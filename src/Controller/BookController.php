@@ -6,16 +6,17 @@ namespace App\Controller;
 use App\Entity\Book;
 use App\Entity\Page;
 use App\Entity\User;
-use App\Form\BookCreateType;
+use App\Form\Book\BookCreateType;
+use App\Form\Book\FilterType;
 use App\Manager\PageManager;
 use App\Utils\Constants;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Knp\Component\Pager\PaginatorInterface;
 
 
 #[Route('/book')]
@@ -75,11 +76,17 @@ class BookController extends AbstractController
     #[Route('/show', name: 'book_show_all')]
     public function showAll(Request $request, PaginatorInterface $paginator): Response
     {
-        $search = $request->query->get('search', '');
+        $data = [];
         $page = $request->query->getInt('page', 1);
-        $limit = Constants::PAGE_LIMIT;
 
-        $result = $this->em->getRepository(Book::class)->get($page, $limit, $search);
+        $form = $this->createForm(FilterType::class);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data['search'] = $form->get('search')->getData();
+        }
+
+        $limit = Constants::PAGE_LIMIT;
+        $result = $this->em->getRepository(Book::class)->get($page, $limit, $data);
         $totalItems = $result['totalItems'];
         $books = $result['items'];
 
@@ -88,8 +95,8 @@ class BookController extends AbstractController
         $prevPage = $page > 1 ? $page - 1 : null;
 
         return $this->render('book/show_all.html.twig', [
+            'form' => $form->createView(),
             'books' => $books,
-            'search' => $search,
             'currentPage' => $page,
             'nextPage' => $nextPage,
             'prevPage' => $prevPage,

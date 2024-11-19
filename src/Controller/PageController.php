@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Entity\Book;
 use App\Entity\Page;
 use App\Entity\Target;
-use App\Form\PageCreateType;
+use App\Form\Page\PageCreateType;
 use App\Manager\PageManager;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;

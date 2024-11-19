@@ -17,14 +17,14 @@ class BookRepository extends ServiceEntityRepository
     /**
      * @throws \Exception
      */
-    public function get(int $page = 1, int $limit = 10, string $search = ''): array
+    public function get(int $page = 1, int $limit = 10, array $data = []): array
     {
         $qb = $this->createQueryBuilder('b')
             ->orderBy('b.title', 'ASC');
 
-        if (!empty($search)) {
+        if (!empty($data['search'])) {
             $qb->andWhere($qb->expr()->like('b.title', ':search'))
-                ->setParameter('search', '%' . $search . '%');
+                ->setParameter('search', '%' . $data['search'] . '%');
         }
 
         $query = $qb->getQuery();

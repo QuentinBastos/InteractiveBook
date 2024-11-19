@@ -20,6 +20,7 @@ button:
   cancel: Annuler
   upload: Télécharger une image
   submit_sibling: Créer une page soeur
+  search: Rechercher
 
 form:
   message: Envoyer un message
@@ -29,6 +30,9 @@ form:
   title: Titre
 
 book:
+  list:
+    title: Liste des livres
+    no_books: Aucun livre n'a été trouvé
   type:
     science_fiction: Science-fiction
     fantasy: Fantaisie
@@ -55,6 +59,8 @@ book:
     coming_of_age: Roman d'apprentissage
     post_apocalyptic: Post-apocalyptique
     satire: Satire
+  form:
+    search: Rechercher un titre de livre...
 
 page:
   edit:

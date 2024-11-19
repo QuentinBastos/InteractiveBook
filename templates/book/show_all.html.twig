@@ -2,40 +2,29 @@
 {% block body %}
     <twig:header/>
     <div class="mt-12 px-12">
-        <h1>List of books</h1>
-        <form method="get" action="{{ path('book_show_all') }}" class="mb-6">
-            <label>
-                <input
-                        type="text"
-                        name="search"
-                        placeholder="Rechercher un livre par titre..."
-                        value="{{ search }}"
-                        class="border rounded px-4 py-2 w-1/2"
-                />
-            </label>
-            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">
-                Rechercher
-            </button>
-        </form>
+        <h1>{{ "book.list.text"|trans }}</h1>
+        {{ form_start(form) }}
+        {{ form_row(form.search) }}
+        {{ form_row(form.submit) }}
+        {{ form_end(form) }}
         <ul class="grid grid-cols-5 gap-28 ">
             {% if books is defined and books is not empty %}
-                {% for book in books %}
-                    <li>
-                        <img src="{{ asset('uploads/671792937df75.png') }}" alt="name"/>
-                        <p>{{ book.title }}</p>
-                        <p>daeda</p>
-                    </li>
-                {% endfor %}
+            {% for book in books %}
+                <li>
+                    <img src="{{ asset('uploads/671792937df75.png') }}" alt="name"/>
+                    <p>{{ book.title }}</p>
+                </li>
+            {% endfor %}
         </ul>
         <div class="pagination">
             {% if prevPage %}
-                <a href="{{ path('book_show_all', { page: 1, search: search }) }}">{{ "paginator.first"|trans }}</a>
-                <a href="{{ path('book_show_all', { page: prevPage, search: search }) }}">{{ "paginator.previous"|trans }}</a>
+                <a href="{{ path('book_show_all', { page: 1}) }}">{{ "paginator.first"|trans }}</a>
+                <a href="{{ path('book_show_all', { page: prevPage }) }}">{{ "paginator.previous"|trans }}</a>
             {% endif %}
             <span>Page {{ currentPage }} of {{ totalPages }}</span>
             {% if nextPage %}
-                <a href="{{ path('book_show_all', { page: nextPage, search: search }) }}">{{ "paginator.next"|trans }}</a>
-                <a href="{{ path('book_show_all', { page: totalPages, search: search }) }}">{{ "paginator.last"|trans }}</a>
+                <a href="{{ path('book_show_all', { page: nextPage}) }}">{{ "paginator.next"|trans }}</a>
+                <a href="{{ path('book_show_all', { page: totalPages }) }}">{{ "paginator.last"|trans }}</a>
             {% endif %}
         </div>
         {% endif %}
