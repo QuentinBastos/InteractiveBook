@@ -9,8 +9,6 @@ until mysql -h db -u root -e "SELECT 1"; do
   sleep 1
 done
 
-# Echo the database name
-echo "Creating database: ${MYSQL_DATABASE}"
 
 # Create the database if it does not exist
 mysql -h db -u root -e "CREATE DATABASE IF NOT EXISTS \`${MYSQL_DATABASE}\`;"

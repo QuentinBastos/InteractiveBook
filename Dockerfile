@@ -46,6 +46,8 @@ RUN chmod +x /usr/local/bin/wait-for-it.sh
 COPY init.sh /usr/local/bin/init.sh
 RUN chmod +x /usr/local/bin/init.sh
 
+RUN npm run build
+
 # Expose port 80
 EXPOSE 80
 

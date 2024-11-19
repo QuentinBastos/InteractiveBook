@@ -6,11 +6,10 @@ if (!Encore.isRuntimeEnvironmentConfigured()) {
 
 Encore
     .setOutputPath('public/build/')
-
     .setPublicPath('/build')
-    .addEntry('app', './assets/app.js') // Exemple : si le fichier est à la racine d'assetsncipale
-    .addStyleEntry('home_css', './assets/styles/home.scss') // Styles pour la page d'accueil
-    .addStyleEntry('app_css', './assets/styles/app.scss') // Styles globaux
+    .addEntry('app', './assets/app.js')
+    .addStyleEntry('home_css', './assets/styles/home.scss')
+    .addStyleEntry('app_css', './assets/styles/app.scss')
     .enablePostCssLoader()
     .enableSassLoader()
     .enableSingleRuntimeChunk()
