@@ -44,5 +44,16 @@ For more information, please contact quentin.bastos@etu.univ-lyon1.fr or nathan.
     docker-compose up --build   # Rebuild the containers and start them
     
     REBUILD THE COMPOSER WHEN YOU ADD A NEW DEPENDENCY
-
 ```
+
+### Install docker for development
+
+    - install docker desktop
+    - install wsl with : wsl --install in powershell
+    - move the file to the wsl folder
+    - run the docker-compose up -d
+    - run the command to install the composer and npm dependencies
+    - run the command to create the database
+    - run the command to migrate the database
+    - run the command to start the server
+    - enjoy the project
