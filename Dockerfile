@@ -36,7 +36,7 @@ RUN rm -rf /var/www/vendor
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Install Composer dependencies
-RUN COMPOSER_ALLOW_SUPERUSER=1 composer install --no-scripts --no-autoloader
+RUN COMPOSER_ALLOW_SUPERUSER=1 composer install --optimize-autoloader
 
 # Copy the vendor folder into the container
 COPY vendor /var/www/vendor
