@@ -41,7 +41,10 @@ class BookController extends AbstractController
             if ($user instanceof User) {
                 $book = new Book();
                 $now = new \DateTime();
-                $book->setType($form->get('type')->getData());
+                $types = $form->get('types')->getData();
+                foreach ($types as $type) {
+                    $book->addType($type);
+                }
                 $book->setTitle($form->get('title')->getData());
                 $book->setUser($this->getUser());
                 $book->setCreatedAt($now);
@@ -83,6 +86,9 @@ class BookController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $data['search'] = $form->get('search')->getData();
+            $data['author'] = $form->get('author')->getData();
+            $data['rate'] = $form->get('rate')->getData();
+            $data['types'] = $form->get('types')->getData();
         }
 
         $limit = Constants::PAGE_LIMIT;

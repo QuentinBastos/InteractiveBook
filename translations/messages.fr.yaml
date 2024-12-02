@@ -28,6 +28,7 @@ form:
   error:
     user_not_logged: Veuillez vous connecter
   title: Titre
+  choose: Choisir...
 
 book:
   list:
@@ -61,6 +62,7 @@ book:
     satire: Satire
   form:
     search: Rechercher un titre de livre...
+    author: Sélectionner un auteur
 
 page:
   edit:

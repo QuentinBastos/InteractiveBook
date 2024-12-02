@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Entity\Book\Book;
+use App\Entity\Book\Rate;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -16,13 +17,22 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+    public function __construct()
+    {
+        $this->books = new ArrayCollection();
+        $this->rates = new ArrayCollection();
+    }
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
     #[ORM\Column(length: 180)]
-    private ?string $email = null;
+    private string $email;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $name = null;
 
     #[ORM\Column]
     private array $roles = [];
@@ -30,13 +40,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Book::class, mappedBy: 'user')]
     private Collection $books;
 
-    public function __construct()
-    {
-        $this->books = new ArrayCollection();
-    }
-
     #[ORM\Column]
-    private ?string $password = null;
+    private string $password;
+
+    #[ORM\OneToMany(targetEntity: Rate::class, mappedBy: 'user')]
+    private Collection $rates;
 
     public function getId(): ?int
     {
@@ -125,4 +133,41 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->books = $books;
     }
+
+    public function getRates(): Collection
+    {
+        return $this->rates;
+    }
+
+    public function addRate(Rate $rate): static
+    {
+        if (!$this->rates->contains($rate)) {
+            $this->rates->add($rate);
+            $rate->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRate(Rate $rate): static
+    {
+        if ($this->rates->removeElement($rate)) {
+            if ($rate->getUser() === $this) {
+                $rate->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(?string $name): void
+    {
+        $this->name = $name;
+    }
+
 }

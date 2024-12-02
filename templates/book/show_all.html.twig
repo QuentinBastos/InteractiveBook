@@ -5,6 +5,11 @@
         <h1>{{ "book.list.title"|trans }}</h1>
         {{ form_start(form) }}
         {{ form_row(form.search) }}
+        {{ form_row(form.author) }}
+        {{ form_row(form.rate) }}
+        {{ form_row(form.types) }}
+        {{ form_row(form.fromPage) }}
+        {{ form_row(form.toPage) }}
         {{ form_row(form.submit) }}
         {{ form_end(form) }}
         <ul class="grid grid-cols-5 gap-28 ">
@@ -37,4 +42,5 @@
 
 {% block javascripts %}
     {{ parent() }}
+    {{ encore_entry_script_tags('app') }}
 {% endblock %}

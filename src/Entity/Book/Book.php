@@ -13,44 +13,17 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: BookRepository::class)]
 class Book
 {
-    const string TYPE_SCIENCE_FICTION = 'science_fiction';
-    const string TYPE_FANTASY = 'fantasy';
-    const string TYPE_MYSTERY = 'mystery';
-    const string TYPE_HORROR = 'horror';
-    const string TYPE_ROMANCE = 'romance';
-    const string TYPE_THRILLER = 'thriller';
-    const string TYPE_ADVENTURE = 'adventure';
-    const string TYPE_HISTORICAL = 'historical';
-    const string TYPE_DYSTOPIA = 'dystopia';
-    const string TYPE_BIOGRAPHY = 'biography';
-    const string TYPE_AUTOBIOGRAPHY = 'autobiography';
-    const string TYPE_ESSAY = 'essay';
-    const string TYPE_DRAMA = 'drama';
-    const string TYPE_POETRY = 'poetry';
-    const string TYPE_PHILOSOPHICAL = 'philosophical';
-    const string TYPE_GOTHIC = 'gothic';
-    const string TYPE_SHORT_STORY = 'short_story';
-    const string TYPE_EPISTOLARY = 'epistolary';
-    const string TYPE_SURREALISM = 'surrealism';
-    const string TYPE_UTOPIA = 'utopia';
-    const string TYPE_FANTASTIC = 'fantastic';
-    const string TYPE_MEMOIR = 'memoir';
-    const string TYPE_COMING_OF_AGE = 'coming_of_age';
-    const string TYPE_POST_APOCALYPTIC = 'post_apocalyptic';
-    const string TYPE_SATIRE = 'satire';
-
     public function __construct()
     {
+        $this->types = new ArrayCollection();
         $this->pages = new ArrayCollection();
+        $this->rates = new ArrayCollection();
     }
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private ?string $type = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $title = null;
@@ -71,6 +44,13 @@ class Book
     #[ORM\Column(type: 'datetime', nullable: true)]
     private ?DateTime $updatedAt = null;
 
+    #[ORM\ManyToMany(targetEntity: Type::class, inversedBy: 'books')]
+    #[ORM\JoinTable(name: 'book_type')]
+    private Collection $types;
+
+    #[ORM\OneToMany(targetEntity: Rate::class, mappedBy: 'book', cascade: ['persist', 'remove'])]
+    private Collection $rates;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -79,16 +59,6 @@ class Book
     public function setId(?int $id): void
     {
         $this->id = $id;
-    }
-
-    public function getType(): ?string
-    {
-        return $this->type;
-    }
-
-    public function setType(?string $type): void
-    {
-        $this->type = $type;
     }
 
     public function getTitle(): ?string
@@ -173,18 +143,54 @@ class Book
         $this->updatedAt = $updatedAt;
     }
 
-    public static function getTypes(): array
+    public function getTypes(): Collection
     {
-        $reflection = new \ReflectionClass(__CLASS__);
-        $constants = $reflection->getConstants();
-        $types = [];
+        return $this->types;
+    }
 
-        foreach ($constants as $key => $value) {
-            if (str_starts_with($key, 'TYPE_')) {
-                $types[$value] = $value;
+    public function addType(Type $type): static
+    {
+        if (!$this->types->contains($type)) {
+            $this->types->add($type);
+            $type->addBook($this);
+        }
+
+        return $this;
+    }
+
+    public function removeType(Type $type): static
+    {
+        if ($this->types->removeElement($type)) {
+            $type->removeBook($this);
+        }
+
+        return $this;
+    }
+
+    public function getRates(): Collection
+    {
+        return $this->rates;
+    }
+
+    public function addRate(Rate $rate): static
+    {
+        if (!$this->rates->contains($rate)) {
+            $this->rates->add($rate);
+            $rate->setBook($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRate(Rate $rate): static
+    {
+        if ($this->rates->removeElement($rate)) {
+            // set the owning side to null (unless already changed)
+            if ($rate->getBook() === $this) {
+                $rate->setBook(null);
             }
         }
 
-        return $types;
+        return $this;
     }
 }

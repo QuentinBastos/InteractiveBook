@@ -10,7 +10,7 @@ Here a short project in Symfony created by using a OpenAI API to generate intera
 5. Run `symfony server:start`
 6. Open your browser and go to `http://localhost:8000`
 7. Enjoy the project
-8. With XDEBUG Symfony : U sould use this line to activate the XDEBUG session `set XDEBUG_SESSION=1`.
+8. With XDEBUG Symfony : U should use this line to activate the XDEBUG session `set XDEBUG_SESSION=1`.
 
 ## Project description
 
@@ -27,6 +27,13 @@ The project is structured as follows:
     - The `src/Controller/RegistrationController.php` file contains the controller that handles the requests for the registration page.
     - The `src/Controller/InfoController.php` file contains the controller that handles the requests for the info page like contact, about, etc...
 ```
+
+### Init project 
+Command to import data in the database :
+    ```
+        - use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+        - 
+    ```
 
 ## Contact 
 

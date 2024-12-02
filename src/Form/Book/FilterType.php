@@ -2,7 +2,11 @@
 
 namespace App\Form\Book;
 
+use App\Entity\Book\Type;
+use App\Entity\User;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -21,6 +25,49 @@ class FilterType extends AbstractType
         $builder
             ->add('search', TextType::class, [
                 'label' => 'book.form.search',
+                'required' => false,
+                'attr' => [
+                    'class' => 'form-control',
+                ],
+            ])
+            ->add('author', EntityType::class, [
+                'class' => User::class,
+                'choice_label' => 'name',
+                'label' => 'book.form.author',
+                'required' => false,
+                'attr' => [
+                    'class' => 'form-control',
+                ],
+                'placeholder' => 'form.choose',
+            ])
+            ->add('rate', NumberType::class, [
+                'label' => 'book.form.rate',
+                'required' => false,
+                'attr' => [
+                    'class' => 'form-control',
+                ],
+            ])
+            ->add('types', EntityType::class, [
+                'class' => Type::class,
+                'choice_label' => 'name',
+                'label' => 'book.form.types',
+                'required' => false,
+                'multiple' => true,
+                'attr' => [
+                    'class' => 'form-control',
+                ],
+                'placeholder' => 'form.choose',
+            ])
+            ->add('fromPage', NumberType::class, [
+                'label' => 'book.form.from_page',
+                'required' => false,
+                'attr' => [
+                    'class' => 'form-control',
+                ],
+            ])
+            ->add('toPage', NumberType::class, [
+                'label' => 'book.form.to_page',
+                'required' => false,
                 'attr' => [
                     'class' => 'form-control',
                 ],
