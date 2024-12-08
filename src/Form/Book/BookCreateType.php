@@ -47,7 +47,7 @@ class BookCreateType extends AbstractType
                 ],
             ])
             ->add('types', CollectionType::class, [
-                'label' => 'Type',
+                'label' => ' ',
                 'entry_type' => TypeType::class,
                 'allow_add' => true,
                 'allow_delete' => true,

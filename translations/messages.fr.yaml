@@ -25,6 +25,7 @@ button:
 
 form:
   message: Envoyer un message
+  description: Description
   type: Type de message
   error:
     user_not_logged: Veuillez vous connecter

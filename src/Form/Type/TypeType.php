@@ -15,9 +15,15 @@ class TypeType extends AbstractType
         $builder
             ->add('name', TextType::class, [
                 'label' => 'form.title',
+                'row_attr' => [
+                    'class' => 'w-full mb-2',
+                ],
             ])
             ->add('description', TextType::class, [
                 'label' => 'form.description',
+                'row_attr' => [
+                    'class' => 'w-full mb-2',
+                ],
             ]);
     }
 
