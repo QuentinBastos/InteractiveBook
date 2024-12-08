@@ -1,20 +1,21 @@
 <li>
-    <a href="{{ path('page_add', {'bookId': page.book.id, 'pageId': page.id}) }}">
-        {{ page.content }}
-    </a>
-    <a href="{{ path('page_add', {'bookId': book.id, 'pageId': last_id, 'parentId': page.id}) }}"
-       class="btn btn-primary">
-        Add Child Page
-    </a>
-    {% if page.parent is defined and page.parent != null %}
-        <a href="{{ path('page_add', {'bookId': book.id, 'pageId': last_id, 'parentId': page.parent ? page.parent.id : null}) }}"
-           class="btn btn-secondary">
-            Add Sibling Page
+    <div class="flex items-center gap-4">
+        <a href="{{ path('page_update', {'bookId': page.book.id, 'pageId': page.id}) }}" class="text-blue-500 hover:underline">
+            {{ page.title }}
         </a>
-    {% endif %}
-    <br>
+        <a href="{{ path('page_add', {'bookId': book.id, 'pageId': last_id, 'parentId': page.id}) }}"
+           class="px-2 py-1 bg-green-500 text-white rounded text-sm hover:bg-green-600">
+            Add Child Page
+        </a>
+        {% if page.parent is defined and page.parent != null %}
+            <a href="{{ path('page_add', {'bookId': book.id, 'pageId': last_id, 'parentId': page.parent ? page.parent.id : null}) }}"
+               class="px-2 py-1 bg-yellow-500 text-white rounded text-sm hover:bg-yellow-600">
+                Add Sibling Page
+            </a>
+        {% endif %}
+    </div>
     {% if page.children|length > 0 %}
-        <ul>
+        <ul class="ml-6 mt-2">
             {% for child in page.children %}
                 {% include 'page/_page_tree.html.twig' with {'page': child} %}
             {% endfor %}

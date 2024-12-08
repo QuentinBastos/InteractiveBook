@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <ul class="flex justify-between shadow px-20 py-4">
+        <li><a href="{{ path('book_show_all') }}" class="text-3xl">{{ "header.all_books"|trans }}</a></li>
+        <li class="text-3xl font-bold">{{ book.title }}</li>
+        {% set author = book.user.email|split('@') %}
+        <li class="text-3xl text-light">{{ author[0] }}</li>
+    </ul>
+    <div class="h-screen flex flex-col justify-between items-center bg-gray-100">
+        <div class="text-center py-4">
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-800">{{ page.content }}</h1>
+        </div>
+        <div class="w-full max-w-6xl h-[60vh] bg-cover bg-center rounded-lg shadow-lg"
+             style="background-image: url('{{ asset('uploads/page/' ~ page.filePath) }}');">
+        </div>
+        {% if toTargets|length > 0 %}
+            <div class="flex flex-wrap justify-center gap-6 py-4">
+                {% for target in toTargets %}
+                    <a href="{{ path('page_show', {'bookId': book.id, 'pageId': target.toPage.id}) }}"
+                       class="px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg text-white text-lg font-semibold shadow-md transition-all">
+                        {{ target.toPage.content }}
+                    </a>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-lg font-semibold text-gray-700 py-4">No further choices available.</p>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('app_css') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

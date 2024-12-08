@@ -1,39 +1,51 @@
 {% extends 'base.html.twig' %}
+
 {% block body %}
     <twig:header/>
-    {% if first_page is defined and first_page == true %}
-        BIENVENUE SUR LA PREMIERE PAGE DE VOTRE LIVRE
-        <br>
-    {% endif %}
-    {% if book is defined and book is not null %}
-        Book ID: {{ book.id }}
-        <br>
-        Book title: {{ book.title }}
-        <br>
-        Book type: {{ book.type }}
-        <br>
-        Book user: {{ book.user.email }}
-        {% if form is defined and form %}
-            {{ form_start(form) }}
-            {{ form_row(form.title) }}
-            {{ form_row(form.struct) }}
-            {{ form_row(form.content) }}
-            {{ form_row(form.filePath) }}
+
+    <div class="container mx-auto px-8">
+        {% if first_page is defined and first_page == true %}
+            <p class="font-bold text-2xl my-2 text-center">BIENVENUE SUR LA PREMIÈRE PAGE DE VOTRE LIVRE</p>
         {% endif %}
-    {% endif %}
-    {% if first_page is defined and first_page == false %}
-        <button type="button" class="add_item_link" data-collection-holder-class="targets">Add a target</button>
-        <ul class="targets"
-            data-index="{{ form.toTargets|length > 0 ? form.toTargets|last.vars.name + 1 : 0 }}"
-            data-prototype="{{ form_widget(form.toTargets.vars.prototype)|e('html_attr') }}"
-        >
-            {% for toTarget in form.toTargets %}
-                <li> {{ form_row(toTarget.toPage) }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-    {{ form_row(form.submit) }}
-    {{ form_end(form) }}
+
+        {% if book is defined and book is not null %}
+            <div class="my-4 p-4 bg-gray-100 rounded shadow-md flex justify-around w-full font-bold">
+                <p>Title: <span class="font-semibold">{{ book.title }}</span></p>
+                <p>Type: <span class="font-semibold">{{ book.type }}</span></p>
+                <p>Author : <span class="font-semibold">{{ book.user.email }}</span></p>
+            </div>
+
+            {% if form is defined and form %}
+                <div class="flex gap-6 bg-orange-100 rounded shadow-lg p-6">
+                    <!-- Form Section -->
+                    <div class="flex flex-col items-center py-12 w-1/2 gap-4 h-full">
+                        {{ form_start(form, {'attr': {'class': 'flex flex-col justify-center items-center w-2/3 gap-4'}}) }}
+                        {{ form_row(form.title) }}
+                        {{ form_row(form.struct) }}
+                        {{ form_row(form.content) }}
+                        {{ form_row(form.filePath) }}
+                        {% if first_page is defined and first_page == false %}
+                            <button type="button" class="add_item_link py-2 px-4 bg-blue-600 text-white rounded shadow"
+                                    data-collection-holder-class="targets">
+                                Add a target
+                            </button>
+                            <ul class="targets mt-4"
+                                data-index="{{ form.toTargets|length > 0 ? form.toTargets|last.vars.name + 1 : 0 }}"
+                                data-prototype="{{ form_widget(form.toTargets.vars.prototype)|e('html_attr') }}"
+                            >
+                                {% for toTarget in form.toTargets %}
+                                    <li> {{ form_row(toTarget.toPage) }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                        {{ form_row(form.submit) }}
+                        {{ form_end(form) }}
+                    </div>
+
+                </div>
+            {% endif %}
+        {% endif %}
+    </div>
 {% endblock %}
 
 {% block stylesheets %}

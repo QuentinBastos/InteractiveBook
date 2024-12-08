@@ -1,19 +1,47 @@
 {% extends 'base.html.twig' %}
+
+
 {% block body %}
+    <twig:header/>
     {% set last_id = get_last_page_id_plus_one() %}
-    {{ ("page." ~ message ~ ".message")|trans }}
-    <br>
-    <a href="{{ path('page_add', {'bookId': book.id, 'pageId': last_id, 'parentId': page.id}) }}"
-       class="btn btn-primary">
-        Add Child Page
-    </a>
-    <br>
-    {% if first_page is defined and first_page == false %}
-    <a href="{{ path('page_add', {'bookId': book.id, 'pageId': last_id, 'parentId': page.parent ? page.parent.id : null}) }}"
-       class="btn btn-secondary">
-        Add Sibling Page
-    </a>
-    {% endif %}
-    <a href="{{ path('book_update', {'id': book.id}) }}">
-        Back to Book
+    <div class="flex flex-col items-center justify-center h-[90vh] bg-gray-100">
+        {% if message is defined %}
+            <p class="text-xl font-semibold mb-8">
+                {{ ("page." ~ message ~ ".message")|trans }}
+            </p>
+        {% endif %}
+
+        <div class="flex gap-8 w-full px-8 justify-center">
+            {% if book is defined and page is defined and last_id is defined %}
+                <a href="{{ path('page_add', {'bookId': book.id, 'pageId': last_id, 'parentId': page.id}) }}"
+                   class="flex flex-col items-center justify-center w-1/3 min-w-[200px] h-48 h-auto text-white rounded-lg shadow-lg hover:bg-neutral-400 border-2 border-black transition-all">
+                    <p class="text-2xl font-bold text-center text-black">Add Child Page</p>
+                </a>
+            {% endif %}
+
+            {% if first_page is defined and first_page == false and book is defined and page is defined and last_id is defined %}
+                <a href="{{ path('page_add', {'bookId': book.id, 'pageId': last_id, 'parentId': page.parent ? page.parent.id : null}) }}"
+                   class="flex flex-col items-center justify-center w-1/3 min-w-[200px] h-48 h-auto bg-green-500 text-white rounded-lg shadow-lg hover:bg-green-600 transition-all">
+                    <p class="text-2xl font-bold text-center">Add Sibling Page</p>
+                </a>
+            {% endif %}
+        </div>
+
+        {% if book is defined %}
+            <a href="{{ path('book_update', {'id': book.id}) }}"
+               class="flex flex-col items-center justify-center mt-8 w-1/3 min-w-[200px] h-48 h-auto bg-gray-800 text-white rounded-lg shadow-lg hover:bg-gray-900 transition-all">
+                <p class="text-2xl font-bold text-center">Back to Book</p>
+            </a>
+        {% endif %}
+    </div>
+{% endblock %}
+
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('home_css') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
 {% endblock %}
