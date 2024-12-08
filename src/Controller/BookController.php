@@ -4,12 +4,14 @@ namespace App\Controller;
 
 
 use App\Entity\Book\Book;
+use App\Entity\Book\Type;
 use App\Entity\Page;
 use App\Entity\User;
 use App\Form\Book\BookCreateType;
 use App\Form\Book\FilterType;
 use App\Manager\PageManager;
 use App\Utils\Constants;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -41,16 +43,23 @@ class BookController extends AbstractController
             if ($user instanceof User) {
                 $book = new Book();
                 $now = new \DateTime();
-                $types = $form->get('types')->getData();
-                foreach ($types as $type) {
-                    $book->addType($type);
-                }
                 $book->setTitle($form->get('title')->getData());
                 $book->setUser($this->getUser());
                 $book->setCreatedAt($now);
                 $book->setUpdatedAt($now);
+
+                $types = $form->get('types')->getData();
+                if ($types instanceof ArrayCollection) {
+                    foreach ($types as $type) {
+                        if ($type instanceof Type) {
+                            $book->addType($type);
+                        }
+                    }
+                }
+
                 $this->em->persist($book);
                 $this->em->flush();
+
                 return $this->redirectToRoute('page_add', [
                     'bookId' => $book->getId(),
                     'pageId' => Page::FIRST_PAGE

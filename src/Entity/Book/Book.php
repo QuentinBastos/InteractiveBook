@@ -44,7 +44,7 @@ class Book
     #[ORM\Column(type: 'datetime', nullable: true)]
     private ?DateTime $updatedAt = null;
 
-    #[ORM\ManyToMany(targetEntity: Type::class, inversedBy: 'books')]
+    #[ORM\ManyToMany(targetEntity: Type::class, inversedBy: 'books', cascade: ['persist', 'remove'])]
     #[ORM\JoinTable(name: 'book_type')]
     private Collection $types;
 

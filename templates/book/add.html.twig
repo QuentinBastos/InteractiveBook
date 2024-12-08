@@ -2,12 +2,21 @@
 {% block body %}
     <twig:header/>
     {% if error is defined and error != false %}
-        {{ error }}
     {% endif %}
+    {{ error }}
     <div class="col-12">
         {{ form_start(form) }}
-        {{ form_row(form.types) }}
+        {{ form_row(form.title) }}
         {{ form_row(form.filePath) }}
+        <button type="button" class="add_item_link" data-collection-holder-class="types">{{ "button.add"|trans }}</button>
+        <ul class="types"
+            data-index="{{ form.types|length > 0 ? form.types|last.vars.name + 1 : 0 }}"
+            data-prototype="{{ form_widget(form.types.vars.prototype)|e('html_attr') }}"
+        >
+            {% for type in form.types %}
+                <li> {{ form_row(type.name) }}</li>
+            {% endfor %}
+        </ul>
         {{ form_end(form) }}
     </div>
 {% endblock %}

@@ -47,8 +47,9 @@ class PageCreateType extends AbstractType
             ->add('toTargets', CollectionType::class, [
                 'entry_type' => TargetType::class,
                 'allow_add' => true,
-                'entry_options' => ['book' => $book],
                 'allow_delete' => true,
+                'entry_options' => ['book' => $book],
+                'label' => ' ',
             ])
             ->add('content', TextareaType::class, [
                 'label' => 'page.form.message',

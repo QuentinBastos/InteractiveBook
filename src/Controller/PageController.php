@@ -77,7 +77,7 @@ class PageController extends AbstractController
             $this->em->flush();
 
             return $this->render('page/after_add.html.twig', [
-                'first_page' => $isFirstPage,
+                '' => $isFirstPage,
                 'page' => $page,
                 'book' => $book,
                 'message' => $message,

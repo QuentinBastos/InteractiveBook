@@ -30,6 +30,7 @@ class BookCreateType extends AbstractType
                 'entry_type' => TypeType::class,
                 'allow_add' => true,
                 'allow_delete' => true,
+                'label' => ' ',
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'button.submit',
