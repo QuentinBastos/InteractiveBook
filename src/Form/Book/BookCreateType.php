@@ -46,7 +46,7 @@ class BookCreateType extends AbstractType
                     'oninput' => 'updateImagePreview(event, "imagePreview")',
                 ],
             ])
-            ->add('type', CollectionType::class, [
+            ->add('types', CollectionType::class, [
                 'label' => 'Type',
                 'entry_type' => TypeType::class,
                 'allow_add' => true,

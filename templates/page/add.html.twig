@@ -11,7 +11,9 @@
         {% if book is defined and book is not null %}
             <div class="my-4 p-4 bg-gray-100 rounded shadow-md flex justify-around w-full font-bold">
                 <p>Title: <span class="font-semibold">{{ book.title }}</span></p>
-                <p>Type: <span class="font-semibold">{{ book.type }}</span></p>
+                {% for type in book.types %}
+                    <p>Type: <span class="font-semibold">{{ type }}</span></p>
+                {% endfor %}
                 <p>Author : <span class="font-semibold">{{ book.user.email }}</span></p>
             </div>
 
