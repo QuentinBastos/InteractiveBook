@@ -1,25 +1,42 @@
 {% extends 'base.html.twig' %}
 {% block body %}
-    <twig:header/>
+    <twig:header xmlns:twig="http://www.w3.org/1999/html"/>
     {% if error is defined and error != false %}
+        <div class="text-red-600 font-bold">{{ error }}</div>
     {% endif %}
-    {{ error }}
-    <div class="col-12">
-        {{ form_start(form) }}
-        {{ form_row(form.title) }}
-        {{ form_row(form.filePath) }}
-        <button type="button" class="add_item_link" data-collection-holder-class="types">{{ "button.add"|trans }}</button>
-        <ul class="types"
-            data-index="{{ form.types|length > 0 ? form.types|last.vars.name + 1 : 0 }}"
-            data-prototype="{{ form_widget(form.types.vars.prototype)|e('html_attr') }}"
-        >
-            {% for type in form.types %}
-                <li> {{ form_row(type.name) }}</li>
-            {% endfor %}
-        </ul>
-        {{ form_end(form) }}
+
+    <div class="px-8 flex p-6 h-[90vh] bg-orange-100">
+        <div class="flex flex-col items-center py-24 w-1/2 gap-4 h-full">
+            {{ form_start(form, {'attr': {'class': 'flex flex-col justify-center items-center w-2/3 gap-4'}}) }}
+            <h1 class="font-bold text-2xl my-2">Create your Book</h1>
+
+            {{ form_row(form.title) }}
+            <button type="button" class="add_item_link" data-collection-holder-class="types">{{ "button.add"|trans }}</button>
+            <ul class="types"
+                data-index="{{ form.types|length > 0 ? form.types|last.vars.name + 1 : 0 }}"
+                data-prototype="{{ form_widget(form.types.vars.prototype)|e('html_attr') }}"
+            >
+                {% for type in form.types %}
+                    <li> {{ form_row(type.name) }}</li>
+                {% endfor %}
+            </ul>
+            {{ form_row(form.filePath) }}
+            {{ form_row(form.submit) }}
+
+            {{ form_end(form) }}
+        </div>
+        <div class="p-4 w-1/2 relative">
+            <img src="{{ asset('img/livre.png') }}" alt="plume"
+                 class="w-full object-contain mb-4 h-[80vh]">
+            <h2 id="titlePreview"
+                class="absolute text-2xl font-handwriting top-[25%] left-[43%] w-1/4 h-auto object-contain mb-4 font bold"></h2>
+            <img id="imagePreview" src="https://via.placeholder.com/150" alt="Book cover preview"
+                 class="absolute mt-4 w-1/4 h-auto object-cover rounded border border-gray-300 mb-4 top-[40%] left-[40%]">
+        </div>
     </div>
+    <twig:footer/>
 {% endblock %}
+
 {% block stylesheets %}
     {{ parent() }}
     {{ encore_entry_link_tags('home_css') }}
@@ -27,4 +44,30 @@
 
 {% block javascripts %}
     {{ parent() }}
+
+    <script>
+        function updatePreview(event, targetId) {
+            const value = event.target.value;
+            document.getElementById(targetId).textContent = value || event.target.placeholder;
+        }
+
+        function updateImagePreview(event, targetId) {
+            const file = event.target.files[0];
+            const imageElement = document.getElementById(targetId);
+
+            if (file) {
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    imageElement.src = e.target.result;
+                };
+
+                reader.readAsDataURL(file);
+            } else {
+                imageElement.src = 'https://via.placeholder.com/150';
+            }
+        }
+
+    </script>
+
 {% endblock %}

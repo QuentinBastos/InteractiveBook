@@ -1,8 +1,8 @@
 {% extends 'base.html.twig' %}
 {% block body %}
     <twig:header/>
-    <div class="mt-12 px-12">
-        <h1>{{ "book.list.title"|trans }}</h1>
+    <div class="pt-6 px-20 border-neutral-800 border-t">
+        <h1 class="text-3xl font-bold pb-4">{{ "book.list.text"|trans }}</h1>
         {{ form_start(form) }}
         {{ form_row(form.search) }}
         {{ form_row(form.author) }}
@@ -12,12 +12,16 @@
         {{ form_row(form.toPage) }}
         {{ form_row(form.submit) }}
         {{ form_end(form) }}
-        <ul class="grid grid-cols-5 gap-28 ">
+        <ul class="grid grid-cols-5 gap-x-24 gap-y-12 mb-4">
             {% if books is defined and books is not empty %}
             {% for book in books %}
                 <li>
-                    <img src="{{ asset('uploads/671792937df75.png') }}" alt="name"/>
-                    <p>{{ book.title }}</p>
+                    <a href="{{ path('book_show', {'id': book.id})}}" class="flex flex-col items-center">
+                        <img src="{{ asset('uploads/671792937df75.png') }}" alt="name" class="rounded shadow-lg"/>
+                        <p class="font-bold pt-2">{{ book.title }}</p>
+                        {% set author = book.user.email|split('@') %}
+                        <p class="font-light">{{ author[0] }}</p>
+                    </a>
                 </li>
             {% endfor %}
         </ul>

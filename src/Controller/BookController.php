@@ -15,10 +15,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 
 #[Route('/book')]
@@ -29,12 +31,14 @@ class BookController extends AbstractController
         private readonly TranslatorInterface    $translator,
         private readonly EntityManagerInterface $em,
         private readonly PageManager            $pageManager,
+
     )
     {
     }
 
     #[Route('/add', name: 'book_add')]
-    public function add(Request $request): Response
+    public function add(Request                                                         $request, SluggerInterface $slugger,
+                        #[Autowire('%kernel.project_dir%/public/uploads/book/')] string $uploadDirectory): Response
     {
         $form = $this->createForm(BookCreateType::class);
         $form->handleRequest($request);
@@ -44,6 +48,16 @@ class BookController extends AbstractController
                 $book = new Book();
                 $now = new \DateTime();
                 $book->setTitle($form->get('title')->getData());
+                $fileUpload = $form->get('filePath')->getData();
+
+                if ($fileUpload) {
+                    $originalFilename = pathinfo($fileUpload->getClientOriginalName(), PATHINFO_FILENAME);
+                    $safeFilename = $slugger->slug($originalFilename);
+                    $newFilename = $safeFilename . '-' . uniqid() . '.' . $fileUpload->guessExtension();
+                    $fileUpload->move($uploadDirectory, $newFilename);
+                    $book->setFilePath($newFilename);
+                }
+
                 $book->setUser($this->getUser());
                 $book->setCreatedAt($now);
                 $book->setUpdatedAt($now);
@@ -75,9 +89,32 @@ class BookController extends AbstractController
     }
 
     #[Route('/update/{id}', name: 'book_update')]
-    public function update(Request $request): Response
+    public function update(Request $request, int $id, SluggerInterface $slugger,
+                           #[Autowire('%kernel.project_dir%/public/uploads/book/')] string $uploadDirectory): Response
     {
-        $book = $this->em->getRepository(Book::class)->find($request->get('id'));
+        $book = $this->em->getRepository(Book::class)->find($id);
+
+        if ($request->isMethod('POST')) {
+            $title = $request->request->get('title');
+            $type = $request->request->get('type');
+            $fileUpload = $request->files->get('filePath');
+
+            $book->setTitle($title);
+            $book->setType($type);
+
+            if ($fileUpload) {
+                $originalFilename = pathinfo($fileUpload->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename . '-' . uniqid() . '.' . $fileUpload->guessExtension();
+                $fileUpload->move($uploadDirectory, $newFilename);
+                $book->setFilePath($newFilename);
+            }
+
+            $this->em->flush();
+
+            return $this->redirectToRoute('book_update', ['id' => $book->getId()]);
+        }
+
         return $this->render('book/update.html.twig', [
             'book' => $book,
             'first_page' => $this->pageManager->getFirstPageByBook($book),
@@ -124,6 +161,10 @@ class BookController extends AbstractController
     #[Route('/show/{id}', name: 'book_show')]
     public function show(Request $request): Response
     {
-        return $this->render('book/show.html.twig');
+        $book = $this->em->getRepository(Book::class)->find($request->get('id'));
+
+        return $this->render('book/show.html.twig', [
+            'book' => $book,
+        ]);
     }
 }
