@@ -15,7 +15,7 @@
             {% if books is defined and books is not empty %}
             {% for book in books %}
                 <li>
-                    <a href="{{ path('book_show', {'id': book.id})}}" class="flex flex-col items-center">
+                    <a href="{{ path('book_show', {'id': book.id}) }}" class="flex flex-col items-center">
                         <img src="{{ asset('uploads/671792937df75.png') }}" alt="name" class="rounded shadow-lg"/>
                         <p class="font-bold pt-2">{{ book.title }}</p>
                         {% set author = book.user.email|split('@') %}

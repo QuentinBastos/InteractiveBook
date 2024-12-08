@@ -44,7 +44,12 @@
             <a href="{{ path('page_show', { 'bookId': book.id, 'pageId': firstPage.id }) }}" class="text-2xl flex justify-center">
                 <p class="border-2 rounded py-2 px-4">LIRE</p>
             </a>
-
+            <h2>Rate this book</h2>
+            {{ form_start(form) }}
+            {{ form_row(form.rate) }}
+            {{ form_row(form.comment) }}
+            {{ form_row(form.submit) }}
+            {{ form_end(form) }}
         </div>
     </div>
 {% endblock %}

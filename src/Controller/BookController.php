@@ -2,43 +2,37 @@
 
 namespace App\Controller;
 
-
 use App\Entity\Book\Book;
+use App\Entity\Book\Rate;
 use App\Entity\Book\Type;
 use App\Entity\Page;
 use App\Entity\User;
 use App\Form\Book\BookCreateType;
 use App\Form\Book\FilterType;
+use App\Form\Rate\RateType;
 use App\Manager\PageManager;
 use App\Utils\Constants;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
-use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
-
 
 #[Route('/book')]
 class BookController extends AbstractController
 {
-
     public function __construct(
-        private readonly TranslatorInterface    $translator,
+        private readonly TranslatorInterface $translator,
         private readonly EntityManagerInterface $em,
-        private readonly PageManager            $pageManager,
-
-    )
-    {
-    }
+        private readonly PageManager $pageManager,
+    ) {}
 
     #[Route('/add', name: 'book_add')]
-    public function add(Request                                                         $request, SluggerInterface $slugger,
-                        #[Autowire('%kernel.project_dir%/public/uploads/book/')] string $uploadDirectory): Response
+    public function add(Request $request, SluggerInterface $slugger, #[Autowire('%kernel.project_dir%/public/uploads/book/')] string $uploadDirectory): Response
     {
         $form = $this->createForm(BookCreateType::class);
         $form->handleRequest($request);
@@ -89,8 +83,7 @@ class BookController extends AbstractController
     }
 
     #[Route('/update/{id}', name: 'book_update')]
-    public function update(Request $request, int $id, SluggerInterface $slugger,
-                           #[Autowire('%kernel.project_dir%/public/uploads/book/')] string $uploadDirectory): Response
+    public function update(Request $request, int $id, SluggerInterface $slugger, #[Autowire('%kernel.project_dir%/public/uploads/book/')] string $uploadDirectory): Response
     {
         $book = $this->em->getRepository(Book::class)->find($id);
 
@@ -120,7 +113,6 @@ class BookController extends AbstractController
             'first_page' => $this->pageManager->getFirstPageByBook($book),
         ]);
     }
-
 
     #[Route('/show', name: 'book_show_all')]
     public function showAll(Request $request): Response
@@ -158,12 +150,28 @@ class BookController extends AbstractController
     }
 
     #[Route('/show/{id}', name: 'book_show')]
-    public function show(Request $request): Response
+    public function show(Request $request, int $id): Response
     {
-        $book = $this->em->getRepository(Book::class)->find($request->get('id'));
+        $book = $this->em->getRepository(Book::class)->find($id);
+        $user = $this->getUser();
+
+        $rating = new Rate();
+        $rating->setBook($book);
+        $rating->setUser($user);
+
+        $form = $this->createForm(RateType::class, $rating);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->em->persist($rating);
+            $this->em->flush();
+
+            return $this->redirectToRoute('book_show', ['id' => $book->getId()]);
+        }
 
         return $this->render('book/show.html.twig', [
             'book' => $book,
+            'form' => $form->createView(),
         ]);
     }
 }
