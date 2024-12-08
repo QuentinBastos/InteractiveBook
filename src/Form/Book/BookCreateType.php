@@ -4,32 +4,22 @@ namespace App\Form\Book;
 
 use App\Entity\Book\Book;
 use App\Entity\Book\Type;
+use App\Form\Type\TypeType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class BookCreateType extends AbstractType
 {
-    public function __construct(
-        private readonly TranslatorInterface $translator
-    )
-    {
-    }
-
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('title', TextareaType::class, [
-                'label' => 'form.message',
-                'attr' => [
-                    'class' => 'form-control',
-                ],
+            ->add('title', TextType::class, [
+                'label' => 'form.title',
             ])
             ->add('filePath', FileType::class, [
                 'label' => 'button.upload',
@@ -37,11 +27,7 @@ class BookCreateType extends AbstractType
                 'data_class' => null,
             ])
             ->add('types', CollectionType::class, [
-                'entry_type' => EntityType::class,
-                'entry_options' => [
-                    'class' => Type::class,
-                    'choice_label' => 'name',
-                ],
+                'entry_type' => TypeType::class,
                 'allow_add' => true,
                 'allow_delete' => true,
             ])

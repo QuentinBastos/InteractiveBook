@@ -31,8 +31,7 @@ The project is structured as follows:
 ### Init project 
 Command to import data in the database :
     ```
-        - use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-        - 
+    php bin/console app:import-types
     ```
 
 ## Contact 

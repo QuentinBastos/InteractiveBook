@@ -19,12 +19,47 @@ class BookRepository extends ServiceEntityRepository
      */
     public function get(int $page = 1, int $limit = 10, array $data = []): array
     {
-        $qb = $this->createQueryBuilder('b')
-            ->orderBy('b.title', 'ASC');
+        $qb = $this->createQueryBuilder('b');
+        $expr = $qb->expr();
+
+        $qb->orderBy('b.title', 'ASC');
 
         if (!empty($data['search'])) {
-            $qb->andWhere($qb->expr()->like('b.title', ':search'))
+            $qb->andWhere($expr->like('b.title', ':search'))
                 ->setParameter('search', '%' . $data['search'] . '%');
+        }
+
+        if (!empty($data['author'])) {
+            $qb->andWhere($expr->eq('b.user', ':author'))
+                ->setParameter('author', $data['author']);
+        }
+
+        if (!empty($data['rate'])) {
+            $qb->andWhere($expr->eq('b.rate', ':rate'))
+                ->setParameter('rate', $data['rate']);
+        }
+
+        if (!empty($data['types'])) {
+            $qb->join('b.types', 't')
+                ->andWhere($expr->in('t.id', ':types'))
+                ->setParameter('types', $data['types']);
+        }
+
+        // TODO : repair the filter by count of pages
+        if (isset($data['fromPage']) || isset($data['toPage'])) {
+            $qb->join('b.pages', 'p');
+        }
+        if (isset($data['fromPage'])) {
+            if ($data['fromPage'] === 0) {
+                $qb->andWhere($expr->isNull('b.pages'));
+            } else {
+                $qb->andWhere($expr->gte('p.number', ':fromPage'))
+                    ->setParameter('fromPage', $data['fromPage']);
+            }
+        }
+        if (isset($data['toPage'])) {
+            $qb->andWhere($expr->lte('p.number', ':toPage'))
+                ->setParameter('toPage', $data['toPage']);
         }
 
         $query = $qb->getQuery();
@@ -44,9 +79,10 @@ class BookRepository extends ServiceEntityRepository
     public function findByTitle(string $search): array
     {
         $qb = $this->createQueryBuilder('b');
+        $expr = $qb->expr();
 
         if (!empty($search)) {
-            $qb->andWhere($qb->expr()->like('b.title', ':search'))
+            $qb->andWhere($expr->like('b.title', ':search'))
                 ->setParameter('search', '%' . $search . '%');
         }
 

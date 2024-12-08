@@ -52,11 +52,10 @@ class FilterType extends AbstractType
                 'choice_label' => 'name',
                 'label' => 'book.form.types',
                 'required' => false,
-                'multiple' => true,
                 'attr' => [
                     'class' => 'form-control',
                 ],
-                'placeholder' => 'form.choose',
+                'placeholder' => 'Select multiple options...',
             ])
             ->add('fromPage', NumberType::class, [
                 'label' => 'book.form.from_page',

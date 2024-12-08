@@ -89,6 +89,8 @@ class BookController extends AbstractController
             $data['author'] = $form->get('author')->getData();
             $data['rate'] = $form->get('rate')->getData();
             $data['types'] = $form->get('types')->getData();
+            $data['fromPage'] = $form->get('fromPage')->getData();
+            $data['toPage'] = $form->get('toPage')->getData();
         }
 
         $limit = Constants::PAGE_LIMIT;
