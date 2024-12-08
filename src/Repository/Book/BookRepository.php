@@ -45,21 +45,9 @@ class BookRepository extends ServiceEntityRepository
                 ->setParameter('types', $data['types']);
         }
 
-        // TODO : repair the filter by count of pages
-        if (isset($data['fromPage']) || isset($data['toPage'])) {
-            $qb->join('b.pages', 'p');
-        }
-        if (isset($data['fromPage'])) {
-            if ($data['fromPage'] === 0) {
-                $qb->andWhere($expr->isNull('b.pages'));
-            } else {
-                $qb->andWhere($expr->gte('p.number', ':fromPage'))
-                    ->setParameter('fromPage', $data['fromPage']);
-            }
-        }
-        if (isset($data['toPage'])) {
-            $qb->andWhere($expr->lte('p.number', ':toPage'))
-                ->setParameter('toPage', $data['toPage']);
+        if (isset($data['maxPage']) && $data['maxPage']) {
+            $qb->andWhere($expr->lte('b.page', ':maxPage'))
+                ->setParameter('maxPage', $data['maxPage']);
         }
 
         $query = $qb->getQuery();

@@ -57,15 +57,8 @@ class FilterType extends AbstractType
                 ],
                 'placeholder' => 'Select multiple options...',
             ])
-            ->add('fromPage', NumberType::class, [
-                'label' => 'book.form.from_page',
-                'required' => false,
-                'attr' => [
-                    'class' => 'form-control',
-                ],
-            ])
-            ->add('toPage', NumberType::class, [
-                'label' => 'book.form.to_page',
+            ->add('maxPage', NumberType::class, [
+                'label' => 'book.form.max_page',
                 'required' => false,
                 'attr' => [
                     'class' => 'form-control',

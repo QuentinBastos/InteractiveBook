@@ -123,7 +123,7 @@ class BookController extends AbstractController
 
 
     #[Route('/show', name: 'book_show_all')]
-    public function showAll(Request $request, PaginatorInterface $paginator): Response
+    public function showAll(Request $request): Response
     {
         $data = [];
         $page = $request->query->getInt('page', 1);
@@ -135,8 +135,7 @@ class BookController extends AbstractController
             $data['author'] = $form->get('author')->getData();
             $data['rate'] = $form->get('rate')->getData();
             $data['types'] = $form->get('types')->getData();
-            $data['fromPage'] = $form->get('fromPage')->getData();
-            $data['toPage'] = $form->get('toPage')->getData();
+            $data['maxPage'] = $form->get('maxPage')->getData();
         }
 
         $limit = Constants::PAGE_LIMIT;

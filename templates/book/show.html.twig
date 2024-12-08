@@ -27,7 +27,9 @@
                 </li>
                 <li class="border-b-2 py-4">
                     <span class="font-medium">Type: </span>
-                    <span class="font-light">{{ book.type }}</span>
+                    {% for type in book.types %}
+                        <p>Type: <span class="font-light">{{ type }}</span></p>
+                    {% endfor %}
                 </li>
                 <li class="border-b-2 py-4">
                     <span class="font-medium">Date of create : </span>

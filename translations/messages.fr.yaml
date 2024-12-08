@@ -35,6 +35,7 @@ form:
 book:
   list:
     title: Liste des livres
+    text: Filtrer les livres
     no_books: Aucun livre n'a été trouvé
   type:
     science_fiction: Science-fiction
@@ -63,8 +64,11 @@ book:
     post_apocalyptic: Post-apocalyptique
     satire: Satire
   form:
+    max_page: Nombre de pages maximum
     search: Rechercher un titre de livre...
     author: Sélectionner un auteur
+    rate: Note
+    type: Type de livre
 
 page:
   edit:
