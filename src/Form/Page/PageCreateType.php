@@ -29,6 +29,8 @@ class PageCreateType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $book = $options['book'];
+        $page = $options['page'];
+
         $builder
             ->add('title', TextType::class, [
                 'label' => 'form.title',
@@ -66,7 +68,7 @@ class PageCreateType extends AbstractType
                 'entry_type' => TargetType::class,
                 'allow_add' => true,
                 'allow_delete' => true,
-                'entry_options' => ['label' => false, 'book' => $book],
+                'entry_options' => ['label' => false, 'book' => $book, 'page' => $page],
                 'label' => ' ',
                 'row_attr' => [
                     'class' => 'w-full mt-4',
@@ -131,6 +133,7 @@ class PageCreateType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Page::class,
             'book' => null,
+            'page' => null,
         ]);
     }
 

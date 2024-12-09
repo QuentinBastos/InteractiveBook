@@ -15,14 +15,20 @@ class TargetType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $book = $options['book'];
+        $page = $options['page'];
 
         $builder
             ->add('toPage', EntityType::class, [
                 'class' => Page::class,
                 'choice_label' => 'title',
-                'query_builder' => function (EntityRepository $er) use ($book) {
+                'query_builder' => function (EntityRepository $er) use ($book, $page) {
                     return $er->createQueryBuilder('p')
+                        ->leftJoin('p.toTargets', 't')
                         ->where('p.book = :book')
+                        ->andWhere('t.fromPage = :page')
+                        ->andWhere('p.id != :pageId')
+                        ->setParameter('pageId', $page->getId())
+                        ->setParameter('page', $page)
                         ->setParameter('book', $book);
                 },
             ]);
@@ -33,6 +39,7 @@ class TargetType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Target::class,
             'book' => null,
+            'page' => null,
         ]);
     }
 }

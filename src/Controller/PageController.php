@@ -63,6 +63,7 @@ class PageController extends AbstractController
 
         $form = $this->createForm(PageCreateType::class, $page, [
             'book' => $book,
+            'page' => $page,
         ]);
         $form->handleRequest($request);
 
@@ -94,7 +95,9 @@ class PageController extends AbstractController
 
             $toTargets = $form->get('toTargets')->getData();
             foreach ($toTargets as $target) {
-                $target->setFromPage($page);
+                if ($target->getFromPage() !== $page) {
+                    $target->setFromPage($page);
+                }
                 $this->em->persist($target);
             }
 
