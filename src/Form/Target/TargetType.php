@@ -33,7 +33,6 @@ class TargetType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Target::class,
             'book' => null,
-            'page_id' => null,
         ]);
     }
 }
