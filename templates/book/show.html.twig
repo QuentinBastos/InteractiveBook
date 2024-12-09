@@ -9,7 +9,7 @@
     </ul>
     <div class="flex px-20 gap-8 py-4 mt-8 h-fit">
         <div class="w-4/12 flex flex-column justify-center h-fit">
-            <a href="{{  path('page_show', { 'bookId': book.id, 'pageId': firstPage.id }) }}"
+            <a href="{{ path('page_show', { 'bookId': book.id, 'pageId': firstPage.id }) }}"
                class="text-2xl h-fit flex justify-center hover:scale-105 transition ease-in-out delay-250 hover:opacity-75">
                 <img src="{{ asset('uploads/book/' ~ book.filePath) }}" alt="{{ book.title }}"
                      class="rounded shadow-lg"/>
@@ -41,24 +41,110 @@
                     <span class="font-light">{{ book.updatedAt|date("m/d/Y") }} </span>
                 </li>
             </ul>
-            {% set firstPage = book.pages|filter(p => p.parent is null)|first %}
-            <a href="{{ path('page_show', { 'bookId': book.id, 'pageId': firstPage.id }) }}" class="text-2xl flex justify-center">
-                <p class="border-2 rounded py-2 px-4">LIRE</p>
-            </a>
-            <h2>Rate this book</h2>
-            {{ form_start(form) }}
-            {{ form_row(form.rate) }}
-            {{ form_row(form.comment) }}
-            {{ form_row(form.submit) }}
-            {{ form_end(form) }}
+            <div class="flex gap-4 items-center my-4">
+                {% set firstPage = book.pages|filter(p => p.parent is null)|first %}
+                <a href="{{ path('page_show', { 'bookId': book.id, 'pageId': firstPage.id }) }}"
+                   class="text-2xl flex justify-center">
+                    <p class="border-2 rounded py-2 px-4">LIRE</p>
+                </a>
+                <a href="{{ path('book_update', { 'id': book.id }) }}" class="text-2xl flex justify-center">
+                    <p class="border-2 rounded py-2 px-4">MODIFIER</p>
+                </a>
+            </div>
+            <h2 class="text-2xl font-bold mb-4">Rate this book</h2>
+            <div class="rating-form">
+                {{ form_start(form) }}
+                <div class="form-group mb-4">
+                    <label for="rate" class="font-medium text-lg">Rate</label>
+                    <div id="star-rating-container" class="flex items-center">
+                        {% for i in 1..5 %}
+                            <input type="radio" id="star-{{ i }}" name="rate" value="{{ i }}"
+                                   class="hidden star-radio" {% if form.rate.vars.value == i %}checked{% endif %}>
+                            <label for="star-{{ i }}" class="star-label" data-value="{{ i }}">&#9733;</label>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="form-group mb-4">
+                    {{ form_row(form.comment, {'attr': {'class': 'form-control rounded border-gray-300'}}) }}
+                </div>
+
+                <div class="form-group">
+                    {{ form_row(form.submit, {'attr': {'class': 'btn btn-primary w-full'}}) }}
+                </div>
+                {{ form_end(form) }}
+            </div>
         </div>
     </div>
 {% endblock %}
 {% block stylesheets %}
     {{ parent() }}
     {{ encore_entry_link_tags('app_css') }}
+
+    <style>
+        #star-rating-container {
+            display: flex;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        .star-label {
+            font-size: 2rem;
+            color: #ccc;
+            transition: color 0.2s ease;
+            cursor: pointer;
+        }
+
+        .star-radio:checked ~ .star-label,
+        .star-radio:not(:checked):hover ~ .star-label {
+            color: #ffd700;
+        }
+
+        .star-radio {
+            display: none;
+        }
+    </style>
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const stars = document.querySelectorAll('.star-label');
+            stars.forEach(star => {
+                star.addEventListener('mouseover', () => {
+                    const value = star.dataset.value;
+                    highlightStars(value);
+                });
+
+                star.addEventListener('mouseleave', () => {
+                    resetStars();
+                });
+
+                star.addEventListener('click', () => {
+                    const value = star.dataset.value;
+                    document.querySelector(`#star-${value}`).checked = true;
+                });
+            });
+
+            function highlightStars(value) {
+                stars.forEach(star => {
+                    star.style.color = star.dataset.value <= value ? '#ffd700' : '#ccc';
+                });
+            }
+
+            function resetStars() {
+                const checkedStar = document.querySelector('.star-radio:checked');
+                if (checkedStar) {
+                    highlightStars(checkedStar.value);
+                } else {
+                    stars.forEach(star => {
+                        star.style.color = '#ccc';
+                    });
+                }
+            }
+        });
+
+    </script>
 {% endblock %}

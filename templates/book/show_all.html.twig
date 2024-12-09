@@ -12,7 +12,11 @@
         {{ form_row(form.types) }}
         {{ form_row(form.maxPage) }}
         </div>
-        {{ form_row(form.submit) }}
+        {{ form_row(form.submit, {
+            'attr': {
+                'class': 'bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 w-full mt-4 mb-4'
+            }
+        }) }}
         {{ form_end(form) }}
 
         <ul class="grid grid-cols-5 gap-x-24 gap-y-12 mb-4">

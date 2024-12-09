@@ -67,12 +67,14 @@ class PageCreateType extends AbstractType
                 'entry_type' => TargetType::class,
                 'allow_add' => true,
                 'allow_delete' => true,
-                'entry_options' => ['book' => $book],
+                'entry_options' => ['label' => false, 'book' => $book],
+                'by_reference' => false, // Important pour les relations ORM
                 'label' => ' ',
                 'row_attr' => [
                     'class' => 'w-full mt-4',
                 ],
             ])
+
             ->add('content', TextareaType::class, [
                 'label' => 'page.form.message',
                 'row_attr' => [

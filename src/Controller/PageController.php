@@ -112,7 +112,6 @@ class PageController extends AbstractController
             throw $this->createNotFoundException('Book not found');
         }
 
-        // Si aucune page n'est spécifiée, trouver la première page
         if ($pageId === null) {
             $firstPage = $this->em->getRepository(Page::class)->findOneBy([
                 'book' => $book,
@@ -123,21 +122,18 @@ class PageController extends AbstractController
                 throw $this->createNotFoundException('No first page found for this book.');
             }
 
-            // Redirection vers la première page
             return $this->redirectToRoute('page_show', [
                 'bookId' => $bookId,
                 'pageId' => $firstPage->getId(),
             ]);
         }
 
-        // Charger la page demandée
         $page = $this->em->getRepository(Page::class)->find($pageId);
 
         if (!$page || $page->getBook() !== $book) {
             throw $this->createNotFoundException('Page not found or does not belong to this book.');
         }
 
-        // Charger les targets associées à la page
         $toTargets = $page->getToTargets();
 
         return $this->render('page/show.html.twig', [
@@ -197,6 +193,7 @@ class PageController extends AbstractController
 
             return $this->redirectToRoute('book_update', ['id' => $bookId]);
         }
+
 
         return $this->render('page/update.html.twig', [
             'page' => $page,

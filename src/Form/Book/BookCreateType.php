@@ -70,8 +70,8 @@ class BookCreateType extends AbstractType
                     'class' => 'w-full flex items-center justify-center mt-4',
                 ],
                 'attr' => [
-                    'style' => 'background-color: black !important; color: white !important; width: 100%',
-                    'class' => 'rounded py-2'
+                    'style' => 'background-color: black !important; color: white !important; width: 100%; ',
+                    'class' => 'rounded py-2 my-4'
                 ],
             ]);
     }
