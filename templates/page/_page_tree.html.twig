@@ -1,7 +1,7 @@
 <li>
     <div class="flex items-center gap-4">
         {% if page is defined and page is not null %}
-            <a href="{{ path('page_update', {'bookId': page.book.id, 'pageId': page.id}) }}"
+            <a href="{{ path('page_add', {'bookId': page.book.id, 'pageId': page.id}) }}"
                class="text-blue-500 hover:underline">
                 {{ page.title }}
             </a>

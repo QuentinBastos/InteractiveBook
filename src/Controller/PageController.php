@@ -39,7 +39,6 @@ class PageController extends AbstractController
             $message = 'add';
             $page = new Page();
             $page->setBook($book);
-            $page->setToTargets(new ArrayCollection());
             if ($parentId) {
                 $parent = $this->em->getRepository(Page::class)->find($parentId);
                 if ($parent) {
@@ -72,12 +71,10 @@ class PageController extends AbstractController
             }
 
             $toTargets = $form->get('toTargets')->getData();
-            if ($toTargets instanceof ArrayCollection) {
-                foreach ($toTargets as $target) {
-                    if ($target instanceof Target) {
-                        $target->setFromPage($page);
-                        $this->em->persist($target);
-                    }
+            foreach ($toTargets as $target) {
+                if ($target instanceof Target) {
+                    $target->setFromPage($page);
+                    $this->em->persist($target);
                 }
             }
 
@@ -86,7 +83,7 @@ class PageController extends AbstractController
             $this->em->flush();
 
             return $this->render('page/after_add.html.twig', [
-                '' => $isFirstPage,
+                'first_page' => $isFirstPage,
                 'page' => $page,
                 'book' => $book,
                 'message' => $message,
@@ -145,12 +142,13 @@ class PageController extends AbstractController
 
     #[Route('/{bookId}/page/update/{pageId}', name: 'page_update')]
     public function update(
-        int $bookId,
-        int $pageId,
+        int              $bookId,
+        int              $pageId,
         SluggerInterface $slugger,
-        string $uploadDirectoryPage,
-        Request $request
-    ): Response {
+        string           $uploadDirectoryPage,
+        Request          $request
+    ): Response
+    {
         $book = $this->em->getRepository(Book::class)->find($bookId);
         $page = $this->em->getRepository(Page::class)->find($pageId);
 
