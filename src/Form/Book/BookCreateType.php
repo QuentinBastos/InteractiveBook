@@ -50,7 +50,6 @@ class BookCreateType extends AbstractType
                 'entry_type' => TypeType::class,
                 'allow_add' => true,
                 'allow_delete' => true,
-                'by_reference' => false,
                 'row_attr' => [
                     'class' => 'w-full mt-4',
                 ],
@@ -59,8 +58,6 @@ class BookCreateType extends AbstractType
                 ],
                 'attr' => [
                     'class' => 'pl-2 py-2 w-full rounded shadow py-1 px-2 flex flex-col hidden', // Hidden by default
-                    'data-index' => "{{ form.types|length > 0 ? form.types|last.vars.name + 1 : 0 }}",
-                    'data-prototype' => "{{ form_widget(form.types.vars.prototype)|e('html_attr') }}",
                 ],
             ])
             ->add('submit', SubmitType::class, [

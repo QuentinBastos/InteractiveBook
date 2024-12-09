@@ -13,7 +13,6 @@ use App\Form\Rate\RateType;
 use App\Manager\PageManager;
 use App\Repository\PageRepository;
 use App\Utils\Constants;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -64,11 +63,16 @@ class BookController extends AbstractController
 
                 $types = $form->get('types')->getData();
                 foreach ($types as $type) {
-                    if ($type instanceof Type) {
+                    $existingType = $this->em->getRepository(Type::class)->findOneBy(['name' => $type->getName()]);
+                    if ($existingType) {
+                        $book->addType($existingType);
+                    } else {
                         $book->addType($type);
                         $this->em->persist($type);
                     }
                 }
+
+                $this->em->flush();
 
                 $this->em->persist($book);
                 $this->em->flush();
@@ -90,7 +94,6 @@ class BookController extends AbstractController
             'error' => $error ?? false,
         ]);
     }
-
 
     #[Route('/update/{id}', name: 'book_update')]
     public function update(Request $request, int $id, SluggerInterface $slugger, string $uploadDirectoryBook): Response

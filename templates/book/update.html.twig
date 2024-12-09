@@ -37,8 +37,8 @@
                     <select id="type" name="type"
                             class="w-full px-4 py-2 rounded border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500">
                         {% for type in book.types %}
-                            <option value="{{ type }}" {% if book.type == type %}selected{% endif %}>
-                                {{ type }}
+                            <option value="{{ type.id }}" {% if book.types.contains(type) %}selected{% endif %}>
+                                {{ type.name }}
                             </option>
                         {% endfor %}
                     </select>

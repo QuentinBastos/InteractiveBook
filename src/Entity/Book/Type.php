@@ -26,7 +26,7 @@ class Type
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $description = null;
 
-    #[ORM\ManyToMany(targetEntity: Book::class, mappedBy: 'types')]
+    #[ORM\ManyToMany(targetEntity: Book::class, mappedBy: 'types', cascade: ['persist'])]
     private Collection $books;
 
     public function getBooks(): Collection
