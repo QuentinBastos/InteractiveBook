@@ -60,13 +60,11 @@ class BookController extends AbstractController
                 $book->setCreatedAt($now);
                 $book->setUpdatedAt($now);
 
-                // Get the types from the form
                 $types = $form->get('types')->getData();
                 if ($types instanceof ArrayCollection) {
                     foreach ($types as $type) {
                         if ($type instanceof Type) {
                             $book->addType($type);
-                            // Persist the type
                             $this->em->persist($type);
                         }
                     }
