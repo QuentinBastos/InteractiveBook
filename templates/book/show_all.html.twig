@@ -6,11 +6,11 @@
         <h1 class="text-3xl font-bold pb-4">{{ "book.list.text"|trans }}</h1>
         {{ form_start(form) }}
         <div class="flex grid-cols-3 gap-6">
-        {{ form_row(form.search) }}
-        {{ form_row(form.author) }}
-        {{ form_row(form.rate) }}
-        {{ form_row(form.types) }}
-        {{ form_row(form.maxPage) }}
+            {{ form_row(form.search) }}
+            {{ form_row(form.author) }}
+            {{ form_row(form.rate) }}
+            {{ form_row(form.types) }}
+            {{ form_row(form.maxPage) }}
         </div>
         {{ form_row(form.submit, {
             'attr': {
@@ -24,7 +24,13 @@
                 {% for book in books %}
                     <li>
                         <a href="{{ path('book_show', {'id': book.id}) }}" class="flex flex-col items-center">
-                            <img src="{{ asset('uploads/book/' ~ book.filePath) }}" alt="{{ book.title }}" class="rounded shadow-lg"/>
+                            {% if book.filePath is defined and book.filePath is not null %}
+                                <img src="{{ asset('uploads/book/' ~ book.filePath) }}" alt="{{ book.title }}"
+                                     class="rounded shadow-lg"/>
+                            {% else %}
+                                <img src="{{ asset('img/livre.png') }}" alt="book image"
+                                     class="rounded shadow-lg"/>
+                            {% endif %}
                             <p class="font-bold pt-2">{{ book.title }}</p>
                             {% set author = book.user.email|split('@') %}
                             <p class="font-light">{{ author[0] }}</p>
@@ -38,13 +44,17 @@
 
         <div class="pagination flex justify-center gap-4 mt-4 mb-4">
             {% if prevPage %}
-                <a href="{{ path('book_show_all', { page: 1}) }}" class="py-2 px-4 bg-gray-200 text-gray-700 rounded hover:bg-gray-300">{{ "paginator.first"|trans }}</a>
-                <a href="{{ path('book_show_all', { page: prevPage }) }}" class="py-2 px-4 bg-gray-200 text-gray-700 rounded hover:bg-gray-300">{{ "paginator.previous"|trans }}</a>
+                <a href="{{ path('book_show_all', { page: 1}) }}"
+                   class="py-2 px-4 bg-gray-200 text-gray-700 rounded hover:bg-gray-300">{{ "paginator.first"|trans }}</a>
+                <a href="{{ path('book_show_all', { page: prevPage }) }}"
+                   class="py-2 px-4 bg-gray-200 text-gray-700 rounded hover:bg-gray-300">{{ "paginator.previous"|trans }}</a>
             {% endif %}
             <span class="py-2 px-4 bg-gray-100 rounded">{{ "Page" }} {{ currentPage }} {{ "of" }} {{ totalPages }}</span>
             {% if nextPage %}
-                <a href="{{ path('book_show_all', { page: nextPage}) }}" class="py-2 px-4 bg-gray-200 text-gray-700 rounded hover:bg-gray-300">{{ "paginator.next"|trans }}</a>
-                <a href="{{ path('book_show_all', { page: totalPages }) }}" class="py-2 px-4 bg-gray-200 text-gray-700 rounded hover:bg-gray-300">{{ "paginator.last"|trans }}</a>
+                <a href="{{ path('book_show_all', { page: nextPage}) }}"
+                   class="py-2 px-4 bg-gray-200 text-gray-700 rounded hover:bg-gray-300">{{ "paginator.next"|trans }}</a>
+                <a href="{{ path('book_show_all', { page: totalPages }) }}"
+                   class="py-2 px-4 bg-gray-200 text-gray-700 rounded hover:bg-gray-300">{{ "paginator.last"|trans }}</a>
             {% endif %}
         </div>
     </div>
@@ -61,21 +71,26 @@
             border-radius: 0.25rem;
             transition: border-color 0.2s ease;
         }
+
         .form-control:focus {
             border-color: #80bdff;
             outline: none;
         }
+
         #rateInput {
             display: none;
         }
+
         .rating {
             display: flex;
             cursor: pointer;
         }
+
         .rating-star {
             font-size: 1.5rem;
             color: #ccc;
         }
+
         .rating-star.active {
             color: #f5d142;
         }
@@ -86,7 +101,7 @@
     {{ parent() }}
     {{ encore_entry_script_tags('app') }}
     <script>
-        document.getElementById('rateInput').addEventListener('input', function() {
+        document.getElementById('rateInput').addEventListener('input', function () {
             let rateValue = parseInt(this.value);
             let ratingStars = document.querySelectorAll('.rating-star');
             ratingStars.forEach((star, index) => {

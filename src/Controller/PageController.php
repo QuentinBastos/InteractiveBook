@@ -29,8 +29,7 @@ class PageController extends AbstractController
     }
 
     #[Route('/{bookId}/add/{pageId}/{parentId?}', name: 'page_add')]
-    public function add(int $bookId, int $pageId, SluggerInterface $slugger,
-                        #[Autowire('%kernel.project_dir%/public/uploads/page/')] string $uploadDirectory, Request $request, ?int $parentId = null): Response
+    public function add(int $bookId, int $pageId, SluggerInterface $slugger, string $uploadDirectoryPage, Request $request, ?int $parentId = null): Response
     {
         $isFirstPage = ($pageId === 1);
         $book = $this->em->getRepository(Book::class)->find($bookId);
@@ -68,7 +67,7 @@ class PageController extends AbstractController
                 $originalFilename = pathinfo($fileUpload->getClientOriginalName(), PATHINFO_FILENAME);
                 $safeFilename = $slugger->slug($originalFilename);
                 $newFilename = $safeFilename . '-' . uniqid() . '.' . $fileUpload->guessExtension();
-                $fileUpload->move($uploadDirectory, $newFilename);
+                $fileUpload->move($uploadDirectoryPage, $newFilename);
                 $page->setFilePath($newFilename);
             }
 
@@ -149,7 +148,7 @@ class PageController extends AbstractController
         int $bookId,
         int $pageId,
         SluggerInterface $slugger,
-        #[Autowire('%kernel.project_dir%/public/uploads/page/')] string $uploadDirectory,
+        string $uploadDirectoryPage,
         Request $request
     ): Response {
         $book = $this->em->getRepository(Book::class)->find($bookId);
@@ -172,7 +171,7 @@ class PageController extends AbstractController
                 $originalFilename = pathinfo($fileUpload->getClientOriginalName(), PATHINFO_FILENAME);
                 $safeFilename = $slugger->slug($originalFilename);
                 $newFilename = $safeFilename . '-' . uniqid() . '.' . $fileUpload->guessExtension();
-                $fileUpload->move($uploadDirectory, $newFilename);
+                $fileUpload->move($uploadDirectoryPage, $newFilename);
                 $page->setFilePath($newFilename);
             }
 
@@ -193,7 +192,6 @@ class PageController extends AbstractController
 
             return $this->redirectToRoute('book_update', ['id' => $bookId]);
         }
-
 
         return $this->render('page/update.html.twig', [
             'page' => $page,

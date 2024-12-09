@@ -15,7 +15,6 @@ use App\Utils\Constants;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -28,13 +27,15 @@ class BookController extends AbstractController
 {
 
     public function __construct(
-        private readonly TranslatorInterface $translator,
+        private readonly TranslatorInterface    $translator,
         private readonly EntityManagerInterface $em,
-        private readonly PageManager $pageManager,
-    ) {}
+        private readonly PageManager            $pageManager,
+    )
+    {
+    }
 
     #[Route('/add', name: 'book_add')]
-    public function add(Request $request, SluggerInterface $slugger, #[Autowire('%kernel.project_dir%/public/uploads/book/')] string $uploadDirectory): Response
+    public function add(Request $request, SluggerInterface $slugger, string $uploadDirectoryBook): Response
     {
         $form = $this->createForm(BookCreateType::class);
         $form->handleRequest($request);
@@ -51,7 +52,7 @@ class BookController extends AbstractController
                     $originalFilename = pathinfo($fileUpload->getClientOriginalName(), PATHINFO_FILENAME);
                     $safeFilename = $slugger->slug($originalFilename);
                     $newFilename = $safeFilename . '-' . uniqid() . '.' . $fileUpload->guessExtension();
-                    $fileUpload->move($uploadDirectory, $newFilename);
+                    $fileUpload->move($uploadDirectoryBook, $newFilename);
                     $book->setFilePath($newFilename);
                 }
 
@@ -90,9 +91,8 @@ class BookController extends AbstractController
     }
 
 
-
     #[Route('/update/{id}', name: 'book_update')]
-    public function update(Request $request, int $id, SluggerInterface $slugger, #[Autowire('%kernel.project_dir%/public/uploads/book/')] string $uploadDirectory): Response
+    public function update(Request $request, int $id, SluggerInterface $slugger, string $uploadDirectoryBook): Response
     {
         $book = $this->em->getRepository(Book::class)->find($id);
 
@@ -108,7 +108,7 @@ class BookController extends AbstractController
                 $originalFilename = pathinfo($fileUpload->getClientOriginalName(), PATHINFO_FILENAME);
                 $safeFilename = $slugger->slug($originalFilename);
                 $newFilename = $safeFilename . '-' . uniqid() . '.' . $fileUpload->guessExtension();
-                $fileUpload->move($uploadDirectory, $newFilename);
+                $fileUpload->move($uploadDirectoryBook, $newFilename);
                 $book->setFilePath($newFilename);
             }
 
@@ -164,7 +164,6 @@ class BookController extends AbstractController
     {
         $book = $this->em->getRepository(Book::class)->find($id);
         $user = $this->getUser();
-
         $rating = new Rate();
         $rating->setBook($book);
         $rating->setUser($user);
