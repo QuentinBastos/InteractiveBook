@@ -28,8 +28,6 @@ class PageCreateType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $book = $options['book'];
-        $page = new Page();
-
         $builder
             ->add('title', TextType::class, [
                 'label' => 'form.title',
@@ -52,7 +50,7 @@ class PageCreateType extends AbstractType
                 'label_attr' => [
                     'class' => 'block mb-2 font-medium text-gray-900 text-lg',
                 ],
-                'choices' => $page->getStructChoices(),
+                'choices' => self::getStructChoices(),
                 'choice_label' => function ($choice) {
                     return $this->translator->trans($choice);
                 },
@@ -120,5 +118,15 @@ class PageCreateType extends AbstractType
             'data_class' => Page::class,
             'book' => null,
         ]);
+    }
+
+    public static function getStructChoices(): array
+    {
+        return [
+            Page::STRUCT_TOP => 'page.struct.top',
+            Page::STRUCT_BOTTOM => 'page.struct.bottom',
+            Page::STRUCT_DOUBLE_PAGE_LEFT => 'page.struct.double_page_left',
+            Page::STRUCT_DOUBLE_PAGE_RIGHT => 'page.struct.double_page_right',
+        ];
     }
 }

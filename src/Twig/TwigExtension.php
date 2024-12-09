@@ -8,11 +8,10 @@ use Twig\TwigFunction;
 
 class TwigExtension extends AbstractExtension
 {
-    private PageRepository $pageRepository;
-
-    public function __construct(PageRepository $pageRepository)
+    public function __construct(
+        private readonly PageRepository $pageRepository,
+    )
     {
-        $this->pageRepository = $pageRepository;
     }
 
     public function getFunctions(): array

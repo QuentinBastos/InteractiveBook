@@ -11,6 +11,7 @@ use App\Form\Book\BookCreateType;
 use App\Form\Book\FilterType;
 use App\Form\Rate\RateType;
 use App\Manager\PageManager;
+use App\Repository\PageRepository;
 use App\Utils\Constants;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
@@ -30,6 +31,7 @@ class BookController extends AbstractController
         private readonly TranslatorInterface    $translator,
         private readonly EntityManagerInterface $em,
         private readonly PageManager            $pageManager,
+        private readonly PageRepository         $pageRepository,
     )
     {
     }
@@ -71,9 +73,12 @@ class BookController extends AbstractController
                 $this->em->persist($book);
                 $this->em->flush();
 
+                $lastPage = $this->pageRepository->findOneBy([], ['id' => 'DESC']);
+                $lastPageId = $lastPage ? $lastPage->getId() + 1 : 1;
+
                 return $this->redirectToRoute('page_add', [
                     'bookId' => $book->getId(),
-                    'pageId' => Page::FIRST_PAGE
+                    'pageId' => $lastPageId,
                 ]);
             } else {
                 $error = $this->translator->trans('form.error.user_not_logged');

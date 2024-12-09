@@ -227,14 +227,4 @@ class Page
     {
         $this->title = $title;
     }
-
-    public static function getStructChoices(): array
-    {
-        return [
-            self::STRUCT_TOP => 'page.struct.top',
-            self::STRUCT_BOTTOM => 'page.struct.bottom',
-            self::STRUCT_DOUBLE_PAGE_LEFT => 'page.struct.double_page_left',
-            self::STRUCT_DOUBLE_PAGE_RIGHT => 'page.struct.double_page_right',
-        ];
-    }
 }

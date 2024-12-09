@@ -47,7 +47,6 @@ class PageController extends AbstractController
         $isFirstPage = ($pageId === 1);
         $book = $this->em->getRepository(Book::class)->find($bookId);
         $page = $this->em->getRepository(Page::class)->find($pageId);
-
         if (!$page) {
             $message = 'add';
             $page = new Page();
@@ -71,15 +70,18 @@ class PageController extends AbstractController
             if (!$book) {
                 throw $this->createNotFoundException('The book does not exist');
             }
-            $message = $form->get('content')->getData();
-
-            $result = $this->authApiService->generateText($message);
-            if (isset($result['error'])) {
-                $response = ['error' => $result['error']];
+            if ($message === 'add') {
+                $text = $form->get('content')->getData();
+                $result = $this->authApiService->generateText($text);
+                if (isset($result['error'])) {
+                    $response = ['error' => $result['error']];
+                } else {
+                    $response = $result['response'];
+                }
+                $page->setContent($response['choices'][0]['message']['content']);
             } else {
-                $response = $result['response'];
+                $page->setContent($form->get('content')->getData());
             }
-            $page->setContent($response['choices'][0]['message']['content']);
             $page->setNumber($this->pageManager->getLastPageByBook($book) + 1);
             $fileUpload = $form->get('filePath')->getData();
             if ($fileUpload) {
@@ -91,15 +93,10 @@ class PageController extends AbstractController
             }
 
             $toTargets = $form->get('toTargets')->getData();
-            if ($toTargets instanceof ArrayCollection) {
-                foreach ($toTargets as $target) {
-                    if ($target instanceof Target) {
-                        $target->setFromPage($page);
-                        $this->em->persist($target);
-                    }
-                }
+            foreach ($toTargets as $target) {
+                $target->setFromPage($page);
+                $this->em->persist($target);
             }
-
 
             $this->em->persist($page);
             $this->em->flush();
@@ -113,8 +110,8 @@ class PageController extends AbstractController
         }
 
         return $this->render('page/add.html.twig', [
-            'previous_page' => $page ?? null,
-            'page' => $page ?? null,
+            'previous_page' => null,
+            'page' => $page,
             'first_page' => $isFirstPage,
             'book' => $book,
             'form' => $form->createView(),
