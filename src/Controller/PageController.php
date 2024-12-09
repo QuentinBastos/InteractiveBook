@@ -51,7 +51,6 @@ class PageController extends AbstractController
 
         $form = $this->createForm(PageCreateType::class, $page, [
             'book' => $book,
-            'current_page' => $page,
         ]);
         $form->handleRequest($request);
 
@@ -72,10 +71,12 @@ class PageController extends AbstractController
             }
 
             $toTargets = $form->get('toTargets')->getData();
-            foreach ($toTargets as $target) {
-                if ($target instanceof Target) {
-                    $target->setFromPage($page);
-                    $this->em->persist($target);
+            if ($toTargets instanceof ArrayCollection) {
+                foreach ($toTargets as $target) {
+                    if ($target instanceof Target) {
+                        $target->setFromPage($page);
+                        $this->em->persist($target);
+                    }
                 }
             }
 
@@ -131,7 +132,7 @@ class PageController extends AbstractController
             throw $this->createNotFoundException('Page not found or does not belong to this book.');
         }
 
-        $toTargets = $this->em->getRepository(Target::class)->findByFromPage($page->getId());
+        $toTargets = $page->getToTargets();
 
         return $this->render('page/show.html.twig', [
             'book' => $book,
@@ -143,13 +144,12 @@ class PageController extends AbstractController
 
     #[Route('/{bookId}/page/update/{pageId}', name: 'page_update')]
     public function update(
-        int              $bookId,
-        int              $pageId,
+        int $bookId,
+        int $pageId,
         SluggerInterface $slugger,
-        string           $uploadDirectoryPage,
-        Request          $request
-    ): Response
-    {
+        string $uploadDirectoryPage,
+        Request $request
+    ): Response {
         $book = $this->em->getRepository(Book::class)->find($bookId);
         $page = $this->em->getRepository(Page::class)->find($pageId);
 
