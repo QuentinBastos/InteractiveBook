@@ -67,8 +67,9 @@ book:
     max_page: Nombre de pages maximum
     search: Rechercher un titre de livre...
     author: Sélectionner un auteur
-    rate: Note
+    rate: Note minimum
     type: Type de livre
+  no_book: Aucun livre n'a été trouvé
 
 page:
   edit:

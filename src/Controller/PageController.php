@@ -29,8 +29,7 @@ class PageController extends AbstractController
     }
 
     #[Route('/{bookId}/add/{pageId}/{parentId?}', name: 'page_add')]
-    public function add(int $bookId, int $pageId, SluggerInterface $slugger,
-                        #[Autowire('%kernel.project_dir%/public/uploads/page/')] string $uploadDirectory, Request $request, ?int $parentId = null): Response
+    public function add(int $bookId, int $pageId, SluggerInterface $slugger, string $uploadDirectoryPage, Request $request, ?int $parentId = null): Response
     {
         $isFirstPage = ($pageId === 1);
         $book = $this->em->getRepository(Book::class)->find($bookId);
@@ -40,7 +39,6 @@ class PageController extends AbstractController
             $message = 'add';
             $page = new Page();
             $page->setBook($book);
-            $page->setToTargets(new ArrayCollection());
             if ($parentId) {
                 $parent = $this->em->getRepository(Page::class)->find($parentId);
                 if ($parent) {
@@ -68,17 +66,15 @@ class PageController extends AbstractController
                 $originalFilename = pathinfo($fileUpload->getClientOriginalName(), PATHINFO_FILENAME);
                 $safeFilename = $slugger->slug($originalFilename);
                 $newFilename = $safeFilename . '-' . uniqid() . '.' . $fileUpload->guessExtension();
-                $fileUpload->move($uploadDirectory, $newFilename);
+                $fileUpload->move($uploadDirectoryPage, $newFilename);
                 $page->setFilePath($newFilename);
             }
 
             $toTargets = $form->get('toTargets')->getData();
-            if ($toTargets instanceof ArrayCollection) {
-                foreach ($toTargets as $target) {
-                    if ($target instanceof Target) {
-                        $target->setFromPage($page);
-                        $this->em->persist($target);
-                    }
+            foreach ($toTargets as $target) {
+                if ($target instanceof Target) {
+                    $target->setFromPage($page);
+                    $this->em->persist($target);
                 }
             }
 
@@ -87,7 +83,7 @@ class PageController extends AbstractController
             $this->em->flush();
 
             return $this->render('page/after_add.html.twig', [
-                '' => $isFirstPage,
+                'first_page' => $isFirstPage,
                 'page' => $page,
                 'book' => $book,
                 'message' => $message,
@@ -146,12 +142,13 @@ class PageController extends AbstractController
 
     #[Route('/{bookId}/page/update/{pageId}', name: 'page_update')]
     public function update(
-        int $bookId,
-        int $pageId,
+        int              $bookId,
+        int              $pageId,
         SluggerInterface $slugger,
-        #[Autowire('%kernel.project_dir%/public/uploads/page/')] string $uploadDirectory,
-        Request $request
-    ): Response {
+        string           $uploadDirectoryPage,
+        Request          $request
+    ): Response
+    {
         $book = $this->em->getRepository(Book::class)->find($bookId);
         $page = $this->em->getRepository(Page::class)->find($pageId);
 
@@ -172,7 +169,7 @@ class PageController extends AbstractController
                 $originalFilename = pathinfo($fileUpload->getClientOriginalName(), PATHINFO_FILENAME);
                 $safeFilename = $slugger->slug($originalFilename);
                 $newFilename = $safeFilename . '-' . uniqid() . '.' . $fileUpload->guessExtension();
-                $fileUpload->move($uploadDirectory, $newFilename);
+                $fileUpload->move($uploadDirectoryPage, $newFilename);
                 $page->setFilePath($newFilename);
             }
 
@@ -193,7 +190,6 @@ class PageController extends AbstractController
 
             return $this->redirectToRoute('book_update', ['id' => $bookId]);
         }
-
 
         return $this->render('page/update.html.twig', [
             'page' => $page,

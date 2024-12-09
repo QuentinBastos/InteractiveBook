@@ -34,19 +34,23 @@ class BookRepository extends ServiceEntityRepository
                 ->setParameter('author', $data['author']);
         }
 
-        if (!empty($data['rate'])) {
-            $qb->andWhere($expr->eq('b.rate', ':rate'))
-                ->setParameter('rate', $data['rate']);
-        }
-
         if (!empty($data['types'])) {
             $qb->join('b.types', 't')
                 ->andWhere($expr->in('t.id', ':types'))
                 ->setParameter('types', $data['types']);
         }
 
+        if (isset($data['rate']) && $data['rate']) {
+            $qb->leftJoin('b.rates', 'r')
+                ->groupBy('b.id')
+                ->having($expr->gte('AVG(r.rate)', ':rate'))
+                ->setParameter('rate', $data['rate']);
+        }
+
         if (isset($data['maxPage']) && $data['maxPage']) {
-            $qb->andWhere($expr->lte('b.page', ':maxPage'))
+            $qb->join('b.pages', 'p')
+                ->groupBy('b.id')
+                ->having($expr->lte('COUNT(p.id)', ':maxPage'))
                 ->setParameter('maxPage', $data['maxPage']);
         }
 

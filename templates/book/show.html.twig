@@ -9,11 +9,13 @@
     </ul>
     <div class="flex px-20 gap-8 py-4 mt-8 h-fit">
         <div class="w-4/12 flex flex-column justify-center h-fit">
-            <a href="{{ path('page_show', { 'bookId': book.id, 'pageId': firstPage.id }) }}"
-               class="text-2xl h-fit flex justify-center hover:scale-105 transition ease-in-out delay-250 hover:opacity-75">
-                <img src="{{ asset('uploads/book/' ~ book.filePath) }}" alt="{{ book.title }}"
-                     class="rounded shadow-lg"/>
-            </a>
+            {% if firstPage is defined and firstPage != false %}
+                <a href="{{ path('page_show', { 'bookId': book.id, 'pageId': firstPage.id }) }}"
+                   class="text-2xl h-fit flex justify-center hover:scale-105 transition ease-in-out delay-250 hover:opacity-75">
+                    <img src="{{ asset('uploads/book/' ~ book.filePath) }}" alt="{{ book.title }}"
+                         class="rounded shadow-lg"/>
+                </a>
+            {% endif %}
         </div>
         <div class="w-8/12 flex flex-col h-fit">
             <h2 class="text-2xl font-medium pb-2 border-b-2">Information :</h2>
@@ -42,11 +44,12 @@
                 </li>
             </ul>
             <div class="flex gap-4 items-center my-4">
-                {% set firstPage = book.pages|filter(p => p.parent is null)|first %}
+                {% if firstPage is defined and firstPage != false %}
                 <a href="{{ path('page_show', { 'bookId': book.id, 'pageId': firstPage.id }) }}"
                    class="text-2xl flex justify-center">
                     <p class="border-2 rounded py-2 px-4">LIRE</p>
                 </a>
+                {% endif %}
                 <a href="{{ path('book_update', { 'id': book.id }) }}" class="text-2xl flex justify-center">
                     <p class="border-2 rounded py-2 px-4">MODIFIER</p>
                 </a>
