@@ -21,4 +21,13 @@ class TargetRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function getTargetsByPage(int $pageId): array
+    {
+        return $this->createQueryBuilder('t')
+            ->andWhere('t.fromPage = :pageId')
+            ->setParameter('pageId', $pageId)
+            ->getQuery()
+            ->getResult();
+    }
 }

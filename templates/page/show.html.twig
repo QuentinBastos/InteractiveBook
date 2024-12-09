@@ -13,18 +13,21 @@
         <div class="w-full max-w-6xl h-[60vh] bg-cover bg-center rounded-lg shadow-lg"
              style="background-image: url('{{ asset('uploads/page/' ~ page.filePath) }}');">
         </div>
-        {% if toTargets|length > 0 %}
-            <div class="flex flex-wrap justify-center gap-6 py-4">
+        <div class="flex flex-wrap justify-center gap-6 py-4">
+            {% if toTargets is defined and toTargets is not empty %}
                 {% for target in toTargets %}
                     <a href="{{ path('page_show', {'bookId': book.id, 'pageId': target.toPage.id}) }}"
                        class="px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg text-white text-lg font-semibold shadow-md transition-all">
-                        {{ target.toPage.content }}
+                        Page {{ target.toPage.number }}
                     </a>
                 {% endfor %}
-            </div>
-        {% else %}
-            <p class="text-lg font-semibold text-gray-700 py-4">No further choices available.</p>
-        {% endif %}
+            {% else %}
+                <a href="{{ path('page_show', {'bookId': book.id, 'pageId': page.id+1}) }}"
+                   class="px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg text-white text-lg font-semibold shadow-md transition-all">
+                    Page {{ page.number+1 }}
+                </a>
+            {% endif %}
+        </div>
     </div>
 {% endblock %}
 

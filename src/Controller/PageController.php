@@ -149,8 +149,7 @@ class PageController extends AbstractController
             throw $this->createNotFoundException('Page not found or does not belong to this book.');
         }
 
-        $toTargets = $page->getToTargets();
-
+        $toTargets = $this->em->getRepository(Target::class)->getTargetsByPage($pageId);
         return $this->render('page/show.html.twig', [
             'book' => $book,
             'page' => $page,
