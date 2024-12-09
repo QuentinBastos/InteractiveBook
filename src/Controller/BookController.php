@@ -168,15 +168,19 @@ class BookController extends AbstractController
     {
         $book = $this->em->getRepository(Book::class)->find($id);
         $user = $this->getUser();
-        $rating = new Rate();
-        $rating->setBook($book);
-        $rating->setUser($user);
-
-        $form = $this->createForm(RateType::class, $rating);
+        $rate = $this->em->getRepository(Rate::class)->findOneBy(['id' => $id, 'user' => $user])->getRates();
+        if (!$rate) {
+            $rate = new Rate();
+            $rate->setBook($book);
+            $rate->setUser($user);
+        } else {
+            $rate = $rate[0];
+        }
+        $form = $this->createForm(RateType::class, $rate);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->em->persist($rating);
+            $this->em->persist($rate);
             $this->em->flush();
 
             return $this->redirectToRoute('book_show', ['id' => $book->getId()]);

@@ -34,7 +34,7 @@ class Rate
         return $this->book;
     }
 
-    public function setBook(?Book $book): static
+    public function setBook(?Book $book): self
     {
         $this->book = $book;
 
@@ -46,7 +46,7 @@ class Rate
         return $this->user;
     }
 
-    public function setUser(?User $user): static
+    public function setUser(?User $user): self
     {
         $this->user = $user;
 
