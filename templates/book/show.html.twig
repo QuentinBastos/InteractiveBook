@@ -51,28 +51,24 @@
                     <p class="border-2 rounded py-2 px-4">MODIFIER</p>
                 </a>
             </div>
-            <h2 class="text-2xl font-bold mb-4">Rate this book</h2>
-            <div class="rating-form">
-                {{ form_start(form) }}
-                <div class="form-group mb-4">
-                    <label for="rate" class="font-medium text-lg">Rate</label>
-                    <div id="star-rating-container" class="flex items-center">
-                        {% for i in 1..5 %}
-                            <input type="radio" id="star-{{ i }}" name="rate" value="{{ i }}"
-                                   class="hidden star-radio" {% if form.rate.vars.value == i %}checked{% endif %}>
-                            <label for="star-{{ i }}" class="star-label" data-value="{{ i }}">&#9733;</label>
-                        {% endfor %}
-                    </div>
-                </div>
-
-                <div class="form-group mb-4">
-                    {{ form_row(form.comment, {'attr': {'class': 'form-control rounded border-gray-300'}}) }}
-                </div>
-
+            <div class="rating-form-container">
+                <h2 class="text-2xl font-bold mb-4">Rate this Book</h2>
+                {{ form_start(form, {'attr': {'class': 'w-full max-w-md space-y-4'}}) }}
                 <div class="form-group">
-                    {{ form_row(form.submit, {'attr': {'class': 'btn btn-primary w-full'}}) }}
+                    {{ form_label(form.rate, 'Rate', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                    {{ form_widget(form.rate, {'attr': {'class': 'mt-1 py-2 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'}}) }}
+                    {{ form_errors(form.rate) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.comment, 'Your comment', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                    {{ form_widget(form.comment, {'attr': {'class': 'mt-1 py-2 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'}}) }}
+                    {{ form_errors(form.comment) }}
+                </div>
+                <div class="form-group">
+                    {{ form_widget(form.submit, {'attr': {'class': 'inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500'}}) }}
                 </div>
                 {{ form_end(form) }}
+
             </div>
         </div>
     </div>
@@ -81,70 +77,17 @@
     {{ parent() }}
     {{ encore_entry_link_tags('app_css') }}
 
+
     <style>
-        #star-rating-container {
-            display: flex;
-            gap: 0.5rem;
-            cursor: pointer;
+        .form-group {
+            margin-bottom: 1rem;
         }
 
-        .star-label {
-            font-size: 2rem;
-            color: #ccc;
-            transition: color 0.2s ease;
-            cursor: pointer;
-        }
-
-        .star-radio:checked ~ .star-label,
-        .star-radio:not(:checked):hover ~ .star-label {
-            color: #ffd700;
-        }
-
-        .star-radio {
-            display: none;
-        }
     </style>
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const stars = document.querySelectorAll('.star-label');
-            stars.forEach(star => {
-                star.addEventListener('mouseover', () => {
-                    const value = star.dataset.value;
-                    highlightStars(value);
-                });
 
-                star.addEventListener('mouseleave', () => {
-                    resetStars();
-                });
-
-                star.addEventListener('click', () => {
-                    const value = star.dataset.value;
-                    document.querySelector(`#star-${value}`).checked = true;
-                });
-            });
-
-            function highlightStars(value) {
-                stars.forEach(star => {
-                    star.style.color = star.dataset.value <= value ? '#ffd700' : '#ccc';
-                });
-            }
-
-            function resetStars() {
-                const checkedStar = document.querySelector('.star-radio:checked');
-                if (checkedStar) {
-                    highlightStars(checkedStar.value);
-                } else {
-                    stars.forEach(star => {
-                        star.style.color = '#ccc';
-                    });
-                }
-            }
-        });
-
-    </script>
 {% endblock %}

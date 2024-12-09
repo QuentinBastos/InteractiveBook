@@ -8,6 +8,7 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -16,14 +17,15 @@ class RateType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('rate', null, [
+            ->add('rate', IntegerType::class, [
                 'label' => 'Rate this book',
+                'required' => true,
                 'attr' => [
-                    'class' => 'star-rating',
                     'min' => 1,
                     'max' => 5,
+                    'class' => 'form-control',
+                    'placeholder' => 'Enter a rating between 1 and 5',
                 ],
-                'required' => true,
             ])
             ->add('comment', TextareaType::class, [
                 'label' => 'Your comment',
@@ -37,6 +39,7 @@ class RateType extends AbstractType
                 'label' => 'Submit Review',
                 'attr' => [
                     'class' => 'btn btn-primary',
+                    'style' => 'background-color: #1D4ED8; color: #FFFFFF;', // Couleur personnalisée
                 ],
             ]);
     }
