@@ -51,6 +51,7 @@ class PageController extends AbstractController
 
         $form = $this->createForm(PageCreateType::class, $page, [
             'book' => $book,
+            'current_page' => $page,
         ]);
         $form->handleRequest($request);
 
@@ -130,7 +131,7 @@ class PageController extends AbstractController
             throw $this->createNotFoundException('Page not found or does not belong to this book.');
         }
 
-        $toTargets = $page->getToTargets();
+        $toTargets = $this->em->getRepository(Target::class)->findByFromPage($page->getId());
 
         return $this->render('page/show.html.twig', [
             'book' => $book,

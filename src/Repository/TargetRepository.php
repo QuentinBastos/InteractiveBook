@@ -12,4 +12,13 @@ class TargetRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Target::class);
     }
+
+    public function findByFromPage(int $pageId): array
+    {
+        return $this->createQueryBuilder('t')
+            ->andWhere('t.fromPage = :pageId')
+            ->setParameter('pageId', $pageId)
+            ->getQuery()
+            ->getResult();
+    }
 }
