@@ -5,6 +5,7 @@ namespace App\Form\Page;
 use App\Entity\Page;
 use App\Form\Target\TargetType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -97,6 +98,19 @@ class PageCreateType extends AbstractType
                 'attr' => [
                     'class' => 'w-full rounded shadow focus:ring-gray-500 focus:border-gray-500 bg-white py-1 px-2',
                     'oninput' => 'updateImagePreview(event, "imagePreview")',
+                ],
+            ])
+            ->add('lastPage', CheckboxType::class, [
+                'label' => 'page.form.last_page',
+                'row_attr' => [
+                    'class' => 'w-full mt-4',
+                ],
+                'label_attr' => [
+                    'class' => 'block mb-2 font-medium text-gray-900 text-lg',
+                ],
+                'required' => false,
+                'attr' => [
+                    'class' => 'w-full rounded shadow focus:ring-gray-500 focus:border-gray-500 bg-white py-1 px-2',
                 ],
             ])
             ->add('submit', SubmitType::class, [

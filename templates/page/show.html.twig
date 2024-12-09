@@ -21,6 +21,11 @@
                         Page {{ target.toPage.number }}
                     </a>
                 {% endfor %}
+            {% elseif page.lastPage == true %}
+                <a href="{{ path('book_show_all') }}"
+                   class="px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg text-white text-lg font-semibold shadow-md transition-all">
+                    {{ "page.last_page"|trans }}
+                </a>
             {% else %}
                 <a href="{{ path('page_show', {'bookId': book.id, 'pageId': page.id+1}) }}"
                    class="px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg text-white text-lg font-semibold shadow-md transition-all">

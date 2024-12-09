@@ -82,6 +82,7 @@ page:
     double_page_left: Double page (image à gauche)
     double_page_right: Double page (image à droite)
   form:
+    last_page: Dernière page
     struct: Emplacement de l'image
     message: Message à l'intelligence artificielle pour générer du contenu
 

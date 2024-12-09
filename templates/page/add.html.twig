@@ -19,13 +19,13 @@
 
             {% if form is defined and form %}
                 <div class="flex gap-6 bg-orange-100 rounded shadow-lg p-6">
-                    <!-- Form Section -->
                     <div class="flex flex-col items-center py-12 w-1/2 gap-4 h-full">
                         {{ form_start(form, {'attr': {'class': 'flex flex-col justify-center items-center w-2/3 gap-4'}}) }}
                         {{ form_row(form.title) }}
                         {{ form_row(form.struct) }}
                         {{ form_row(form.content) }}
                         {{ form_row(form.filePath) }}
+                        {{ form_row(form.lastPage) }}
                         {% if first_page is defined and first_page == false %}
                             <button type="button" class="add_item_link py-2 px-4 bg-blue-600 text-white rounded shadow"
                                     data-collection-holder-class="targets">
