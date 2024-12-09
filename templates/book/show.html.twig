@@ -41,15 +41,16 @@
                     <span class="font-light">{{ book.updatedAt|date("m/d/Y") }} </span>
                 </li>
             </ul>
-            <div class="flex my-4 gap-4">
-                <a href="{{ path('page_show', { 'bookId': book.id, 'pageId': firstPage.id }) }}"
-                   class="text-2xl flex justify-center">
-                    <p class="border-2 rounded py-2 px-4">LIRE</p>
-                </a>
-                <a href="{{ path('book_update', { 'id': book.id }) }}" class="text-2xl flex justify-center">
-                    <p class="border-2 rounded py-2 px-4">MODIFIER</p>
-                </a>
-            </div>
+            {% set firstPage = book.pages|filter(p => p.parent is null)|first %}
+            <a href="{{ path('page_show', { 'bookId': book.id, 'pageId': firstPage.id }) }}" class="text-2xl flex justify-center">
+                <p class="border-2 rounded py-2 px-4">LIRE</p>
+            </a>
+            <h2>Rate this book</h2>
+            {{ form_start(form) }}
+            {{ form_row(form.rate) }}
+            {{ form_row(form.comment) }}
+            {{ form_row(form.submit) }}
+            {{ form_end(form) }}
         </div>
     </div>
 {% endblock %}

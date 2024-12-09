@@ -6,13 +6,13 @@
         <h1 class="text-3xl font-bold pb-4">{{ "book.list.text"|trans }}</h1>
         {{ form_start(form) }}
         <div class="flex grid-cols-3 gap-6">
-            {{ form_row(form.search, {'attr': {'placeholder': 'Search by title, author...','class': 'form-control'}}) }}
-            {{ form_row(form.author, {'attr': {'class': 'form-control'}}) }}
-            {{ form_row(form.rate, {'attr': {'class': 'form-control', 'id': 'rateInput'}}) }}
-            {{ form_row(form.types, {'attr': {'class': 'form-control'}}) }}
-            {{ form_row(form.maxPage, {'attr': {'placeholder': 'Max pages','class': 'form-control'}}) }}
+        {{ form_row(form.search) }}
+        {{ form_row(form.author) }}
+        {{ form_row(form.rate) }}
+        {{ form_row(form.types) }}
+        {{ form_row(form.maxPage) }}
         </div>
-        {{ form_row(form.submit, {'attr': {'class': 'bg-blue-500 text-white py-2 px-4 my-6 rounded hover:bg-blue-600 w-full'}}) }}
+        {{ form_row(form.submit) }}
         {{ form_end(form) }}
 
         <ul class="grid grid-cols-5 gap-x-24 gap-y-12 mb-4">
