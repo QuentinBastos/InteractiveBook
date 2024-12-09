@@ -1,5 +1,6 @@
 {% extends 'base.html.twig' %}
 {% block body %}
+    {% set firstPage = book.pages|filter(p => p.parent is null)|first %}
     <ul class="flex justify-between shadow px-20 py-4">
         <li><a href="{{ path('book_show_all') }}" class="text-3xl">{{ "header.all_books"|trans }}</a></li>
         <li class="text-3xl font-bold">{{ book.title }}</li>
@@ -8,9 +9,9 @@
     </ul>
     <div class="flex px-20 gap-8 py-4 mt-8 h-fit">
         <div class="w-4/12 flex flex-column justify-center h-fit">
-            <a href="{{ path('book_show_all') }}"
+            <a href="{{  path('page_show', { 'bookId': book.id, 'pageId': firstPage.id }) }}"
                class="text-2xl h-fit flex justify-center hover:scale-105 transition ease-in-out delay-250 hover:opacity-75">
-                <img src="{{ asset('uploads/671792937df75.png') }}" alt="{{ book.title }}"
+                <img src="{{ asset('uploads/book/' ~ book.filePath) }}" alt="{{ book.title }}"
                      class="rounded shadow-lg"/>
             </a>
         </div>
@@ -40,11 +41,15 @@
                     <span class="font-light">{{ book.updatedAt|date("m/d/Y") }} </span>
                 </li>
             </ul>
-            {% set firstPage = book.pages|filter(p => p.parent is null)|first %}
-            <a href="{{ path('page_show', { 'bookId': book.id, 'pageId': firstPage.id }) }}" class="text-2xl flex justify-center">
-                <p class="border-2 rounded py-2 px-4">LIRE</p>
-            </a>
-
+            <div class="flex my-4 gap-4">
+                <a href="{{ path('page_show', { 'bookId': book.id, 'pageId': firstPage.id }) }}"
+                   class="text-2xl flex justify-center">
+                    <p class="border-2 rounded py-2 px-4">LIRE</p>
+                </a>
+                <a href="{{ path('book_update', { 'id': book.id }) }}" class="text-2xl flex justify-center">
+                    <p class="border-2 rounded py-2 px-4">MODIFIER</p>
+                </a>
+            </div>
         </div>
     </div>
 {% endblock %}

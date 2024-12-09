@@ -13,7 +13,6 @@ use App\Manager\PageManager;
 use App\Utils\Constants;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
-use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
@@ -37,11 +36,12 @@ class BookController extends AbstractController
     }
 
     #[Route('/add', name: 'book_add')]
-    public function add(Request                                                         $request, SluggerInterface $slugger,
+    public function add(Request $request, SluggerInterface $slugger,
                         #[Autowire('%kernel.project_dir%/public/uploads/book/')] string $uploadDirectory): Response
     {
         $form = $this->createForm(BookCreateType::class);
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $this->getUser();
             if ($user instanceof User) {
@@ -62,11 +62,14 @@ class BookController extends AbstractController
                 $book->setCreatedAt($now);
                 $book->setUpdatedAt($now);
 
+                // Get the types from the form
                 $types = $form->get('types')->getData();
                 if ($types instanceof ArrayCollection) {
                     foreach ($types as $type) {
                         if ($type instanceof Type) {
                             $book->addType($type);
+                            // Persist the type
+                            $this->em->persist($type);
                         }
                     }
                 }
@@ -82,11 +85,14 @@ class BookController extends AbstractController
                 $error = $this->translator->trans('form.error.user_not_logged');
             }
         }
+
         return $this->render('book/add.html.twig', [
             'form' => $form->createView(),
             'error' => $error ?? false,
         ]);
     }
+
+
 
     #[Route('/update/{id}', name: 'book_update')]
     public function update(Request $request, int $id, SluggerInterface $slugger,
@@ -160,10 +166,16 @@ class BookController extends AbstractController
     #[Route('/show/{id}', name: 'book_show')]
     public function show(Request $request): Response
     {
-        $book = $this->em->getRepository(Book::class)->find($request->get('id'));
+        $bookId = $request->get('id');
+        $book = $this->em->getRepository(Book::class)->find($bookId);
+
+        if (!$book) {
+            return $this->redirectToRoute('book_list'); // Redirect to your book list page
+        }
 
         return $this->render('book/show.html.twig', [
             'book' => $book,
         ]);
     }
+
 }

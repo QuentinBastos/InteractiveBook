@@ -185,7 +185,6 @@ class Book
     public function removeRate(Rate $rate): static
     {
         if ($this->rates->removeElement($rate)) {
-            // set the owning side to null (unless already changed)
             if ($rate->getBook() === $this) {
                 $rate->setBook(null);
             }
@@ -194,3 +193,4 @@ class Book
         return $this;
     }
 }
+

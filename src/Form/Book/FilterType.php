@@ -14,8 +14,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class FilterType extends AbstractType
 {
-
-
     public function __construct()
     {
     }
@@ -28,44 +26,49 @@ class FilterType extends AbstractType
                 'required' => false,
                 'attr' => [
                     'class' => 'form-control',
+                    'placeholder' => 'Search by title, author...'
                 ],
             ])
             ->add('author', EntityType::class, [
                 'class' => User::class,
-                'choice_label' => 'name',
+                'choice_label' => 'email',
                 'label' => 'book.form.author',
                 'required' => false,
                 'attr' => [
                     'class' => 'form-control',
+                    'placeholder' => 'Choose author'
                 ],
-                'placeholder' => 'form.choose',
             ])
-            ->add('rate', NumberType::class, [
+            ->add('rate', null, [
                 'label' => 'book.form.rate',
                 'required' => false,
                 'attr' => [
-                    'class' => 'form-control',
+                    'class' => 'form-control rate',
                 ],
             ])
             ->add('types', EntityType::class, [
                 'class' => Type::class,
                 'choice_label' => 'name',
-                'label' => 'book.form.types',
+                'label' => 'Types',
                 'required' => false,
                 'attr' => [
                     'class' => 'form-control',
+                    'placeholder' => 'Select multiple options...'
                 ],
-                'placeholder' => 'Select multiple options...',
             ])
-            ->add('maxPage', NumberType::class, [
+            ->add('maxPage', null, [
                 'label' => 'book.form.max_page',
                 'required' => false,
                 'attr' => [
                     'class' => 'form-control',
+                    'placeholder' => 'Max pages'
                 ],
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'button.search',
+                'attr' => [
+                    'class' => 'bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 w-full'
+                ],
             ]);
     }
 

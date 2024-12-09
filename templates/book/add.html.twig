@@ -11,11 +11,14 @@
             <h1 class="font-bold text-2xl my-2">Create your Book</h1>
 
             {{ form_row(form.title) }}
-            <button type="button" class="add_item_link" data-collection-holder-class="types">{{ "button.add"|trans }}</button>
-            <ul class="types"
+            <button type="button" class="add_item_link bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+                    onclick="addNewType()">
+                {{ "button.add"|trans }}
+            </button>
+
+            <ul id="types-list" class="types mt-4 pl-2 py-2 w-full rounded shadow bg-white hidden"
                 data-index="{{ form.types|length > 0 ? form.types|last.vars.name + 1 : 0 }}"
-                data-prototype="{{ form_widget(form.types.vars.prototype)|e('html_attr') }}"
-            >
+                data-prototype="{{ form_widget(form.types.vars.prototype)|e('html_attr') }}">
                 {% for type in form.types %}
                     <li class="flex flex-row gap-4 items-center">
                         {{ form_row(type.name, {'label': false}) }}
@@ -23,6 +26,7 @@
                     </li>
                 {% endfor %}
             </ul>
+
             {{ form_row(form.filePath) }}
             {{ form_row(form.submit) }}
 
@@ -70,6 +74,17 @@
                 imageElement.src = 'https://via.placeholder.com/150';
             }
         }
+
+        function addNewType() {
+            const typesList = document.getElementById('types-list');
+            const prototype = typesList.dataset.prototype.replace(/__name__/g, typesList.dataset.index);
+
+            typesList.insertAdjacentHTML('beforeend', prototype);
+
+            typesList.dataset.index++;
+            typesList.classList.remove('hidden');
+        }
+
 
     </script>
 
