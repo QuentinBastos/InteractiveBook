@@ -7,14 +7,19 @@ use App\Entity\Page;
 use App\Entity\Target;
 use App\Form\Page\PageCreateType;
 use App\Manager\PageManager;
+use App\Service\AuthApiService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 #[Route('/page')]
 class PageController extends AbstractController
@@ -23,11 +28,19 @@ class PageController extends AbstractController
 
     public function __construct(
         private readonly EntityManagerInterface $em,
-        private readonly PageManager            $pageManager
+        private readonly PageManager            $pageManager,
+        private readonly AuthApiService         $authApiService,
     )
     {
     }
 
+    /**
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws DecodingExceptionInterface
+     * @throws ClientExceptionInterface
+     */
     #[Route('/{bookId}/add/{pageId}/{parentId?}', name: 'page_add')]
     public function add(int $bookId, int $pageId, SluggerInterface $slugger, string $uploadDirectoryPage, Request $request, ?int $parentId = null): Response
     {
@@ -58,9 +71,16 @@ class PageController extends AbstractController
             if (!$book) {
                 throw $this->createNotFoundException('The book does not exist');
             }
+            $message = $form->get('content')->getData();
 
+            $result = $this->authApiService->generateText($message);
+            if (isset($result['error'])) {
+                $response = ['error' => $result['error']];
+            } else {
+                $response = $result['response'];
+            }
+            $page->setContent($response['choices'][0]['message']['content']);
             $page->setNumber($this->pageManager->getLastPageByBook($book) + 1);
-            $page->setContent($form->get('content')->getData());
             $fileUpload = $form->get('filePath')->getData();
             if ($fileUpload) {
                 $originalFilename = pathinfo($fileUpload->getClientOriginalName(), PATHINFO_FILENAME);
@@ -144,12 +164,13 @@ class PageController extends AbstractController
 
     #[Route('/{bookId}/page/update/{pageId}', name: 'page_update')]
     public function update(
-        int $bookId,
-        int $pageId,
+        int              $bookId,
+        int              $pageId,
         SluggerInterface $slugger,
-        string $uploadDirectoryPage,
-        Request $request
-    ): Response {
+        string           $uploadDirectoryPage,
+        Request          $request
+    ): Response
+    {
         $book = $this->em->getRepository(Book::class)->find($bookId);
         $page = $this->em->getRepository(Page::class)->find($pageId);
 

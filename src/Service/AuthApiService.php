@@ -19,7 +19,7 @@ class AuthApiService
         private readonly HttpClientInterface $httpClient,
         string                               $baseUrl,
         string                               $apiSecret,
-        string                               $projectId
+        string                               $projectId,
     )
     {
         $this->baseUrl = $baseUrl;
