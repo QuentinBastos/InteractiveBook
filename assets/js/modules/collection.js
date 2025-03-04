@@ -1,5 +1,3 @@
-console.log('collection.js loaded');
-
 document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.delete_item_link').forEach(function(button) {
         button.addEventListener('click', function(e) {
